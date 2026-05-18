@@ -29,4 +29,4 @@ PY
 
 Open the notebook for the end-to-end ingestion workflow:
 
-- `notebooks/02_ingestion.ipynb`
+- `notebooks/ingestion.ipynb`
