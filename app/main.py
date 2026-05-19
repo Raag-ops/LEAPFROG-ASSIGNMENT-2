@@ -7,6 +7,7 @@ from typing import AsyncGenerator
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.openapi.docs import get_swagger_ui_html
 
 from app.api.routes import router
 from app.api.dependencies import get_embedding_service, get_vector_store, get_llm_service
@@ -47,16 +48,27 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title=settings.app_name,
         version=settings.app_version,
-        description=(
-            "Production RAG pipeline for job data retrieval. "
-            "Combines hybrid search (dense + keyword) with optional "
-            "cross-encoder reranking and LLM answer synthesis."
-        ),
+        description="Query job listings with a RAG pipeline.",
         lifespan=lifespan,
-        docs_url="/docs",
-        redoc_url="/redoc",
+        docs_url=None,
+        redoc_url=None,
         openapi_url="/openapi.json",
     )
+
+    @app.get("/docs", include_in_schema=False)
+    async def api_docs():
+        return get_swagger_ui_html(
+            openapi_url=app.openapi_url,
+            title=f"{settings.app_name} API",
+            swagger_ui_parameters={
+                "defaultModelsExpandDepth": -1,
+                "docExpansion": "list",
+                "filter": False,
+                "showExtensions": False,
+                "showCommonExtensions": False,
+                "tryItOutEnabled": True,
+            },
+        )
 
     # ── CORS ───────────────────────────────────────────────────────────────────
     app.add_middleware(
@@ -87,7 +99,7 @@ def create_app() -> FastAPI:
         )
 
     # ── Routes ─────────────────────────────────────────────────────────────────
-    app.include_router(router, prefix="/api", tags=["RAG"])
+    app.include_router(router, prefix="/api")
 
     return app
 

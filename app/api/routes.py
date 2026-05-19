@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, status
 
-from app.api.dependencies import RAGPipelineDep, SettingsDep, VectorStoreDep
+from app.api.dependencies import LLMServiceDep, RAGPipelineDep, SettingsDep, VectorStoreDep
 from app.core.logging import get_logger
 from app.models.schemas import HealthResponse, QueryRequest, QueryResponse
 
@@ -15,18 +15,15 @@ router = APIRouter()
     "/query",
     response_model=QueryResponse,
     status_code=status.HTTP_200_OK,
-    summary="Query the RAG pipeline",
-    description=(
-        "Submit a natural-language job search query. The pipeline retrieves "
-        "relevant job listing chunks, optionally reranks them, and generates "
-        "a synthesised answer grounded exclusively in the retrieved context."
-    ),
+    summary="Query jobs",
+    description="Send a question and get a RAG answer from the indexed job data.",
     responses={
         200: {"description": "Successful RAG response"},
         422: {"description": "Validation error in request body"},
         503: {"description": "Vector store not ready (run the ingest script first)"},
         500: {"description": "Internal pipeline error"},
     },
+    tags=["POST"],
 )
 async def query(
     request: QueryRequest,
@@ -71,12 +68,14 @@ async def query(
     "/health",
     response_model=HealthResponse,
     status_code=status.HTTP_200_OK,
-    summary="Health check",
-    description="Returns application liveness status and vector store readiness.",
+    summary="Health",
+    description="Check whether the API and vector store are ready.",
+    tags=["GET"],
 )
 async def health(
     settings: SettingsDep,
     vector_store: VectorStoreDep,
+    llm_service: LLMServiceDep,
 ) -> HealthResponse:
 
     return HealthResponse(
@@ -84,5 +83,5 @@ async def health(
         version=settings.app_version,
         vector_store_ready=vector_store.is_ready(),
         embedding_model=settings.embedding_model,
-        llm_model=settings.llm_model,
+        llm_model=f"{llm_service.provider}:{llm_service.model_name}",
     )

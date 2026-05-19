@@ -1,24 +1,4 @@
 #!/usr/bin/env python3
-"""
-Data ingestion script.
-
-Reads the job listings CSV, preprocesses and chunks each job description,
-generates embeddings, and upserts everything into the ChromaDB vector store.
-
-Usage
------
-    python scripts/ingest.py                        # default data path from .env
-    python scripts/ingest.py --data-path data/jobs.csv
-    python scripts/ingest.py --data-path data/jobs.csv --batch-size 128 --dry-run
-
-This script is idempotent: re-running it upserts (not duplicates) chunks
-because chunk IDs are deterministic hashes of (job_id, chunk_index).
-
-Expected CSV columns
---------------------
-    ID, Job Category, Job Title, Company Name, Publication Date,
-    Job Location, Job Level, Tags, Job Description
-"""
 from __future__ import annotations
 
 import argparse
@@ -70,19 +50,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def load_dataframe(data_path: str) -> pd.DataFrame:
-    """
-    Load and minimally validate the jobs CSV.
 
-    Args:
-        data_path: Path to the CSV file.
-
-    Returns:
-        DataFrame with required columns.
-
-    Raises:
-        FileNotFoundError: If the CSV does not exist.
-        ValueError: If required columns are missing.
-    """
     path = Path(data_path)
     if not path.exists():
         raise FileNotFoundError(f"Data file not found: {path.resolve()}")
@@ -109,15 +77,7 @@ def load_dataframe(data_path: str) -> pd.DataFrame:
 
 
 def build_documents(df: pd.DataFrame) -> list[dict]:
-    """
-    Convert each CSV row into a document dict with text + metadata.
 
-    Args:
-        df: Jobs DataFrame.
-
-    Returns:
-        List of document dicts ready for the chunker.
-    """
     documents = []
     for _, row in df.iterrows():
         doc_text = build_chunk_document(dict(row))
