@@ -1,8 +1,18 @@
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _resolve_project_path(path: str) -> str:
+    path_obj = Path(path).expanduser()
+    if path_obj.is_absolute():
+        return str(path_obj)
+    return str((PROJECT_ROOT / path_obj).resolve())
 
 
 class Settings(BaseSettings):
@@ -41,7 +51,7 @@ class Settings(BaseSettings):
     embedding_batch_size: int = 64
 
     # ── Vector store ───────────────────────────────────────────────────────────
-    chroma_persist_dir: str = "./data/chroma_db"
+    chroma_persist_dir: str = str(PROJECT_ROOT / "data" / "chroma_db")
     chroma_collection_name: str = "job_listings"
 
     # ── Chunking ───────────────────────────────────────────────────────────────
@@ -61,7 +71,12 @@ class Settings(BaseSettings):
     reranker_top_n: int = Field(default=3, ge=1, le=10)
 
     # ── Data ───────────────────────────────────────────────────────────────────
-    data_path: str = "./data/jobs.csv"
+    data_path: str = str(PROJECT_ROOT / "data" / "LFJobs.csv")
+
+    @field_validator("chroma_persist_dir", "data_path")
+    @classmethod
+    def resolve_paths_from_project_root(cls, v: str) -> str:
+        return _resolve_project_path(v)
 
     @field_validator("chunk_overlap")
     @classmethod

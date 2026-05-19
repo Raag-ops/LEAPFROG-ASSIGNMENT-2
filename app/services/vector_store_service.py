@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import Any, Dict, List, Optional
 
 import chromadb
@@ -11,12 +12,15 @@ from app.services.embedding_service import EmbeddingService
 
 logger = get_logger(__name__)
 
+_TOKEN_RE = re.compile(r"[a-z0-9+#.]+")
+
 
 class VectorStoreService:
 
     def __init__(self, embedding_service: EmbeddingService) -> None:
         settings = get_settings()
         self._embedding_service = embedding_service
+        self._keyword_cache: Optional[List[Dict[str, Any]]] = None
 
         logger.info("initialising_chroma", persist_dir=settings.chroma_persist_dir)
         self._client = chromadb.PersistentClient(
@@ -63,6 +67,7 @@ class VectorStoreService:
             logger.debug("batch_upserted", start=start, end=start + len(batch))
 
         logger.info("chunks_added", total=total)
+        self._keyword_cache = None
 
     # ── Retrieval ──────────────────────────────────────────────────────────────
 
