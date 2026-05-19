@@ -118,37 +118,42 @@ class VectorStoreService:
         where: Optional[Dict[str, Any]] = None,
     ) -> List[Dict[str, Any]]:
 
-        query_kwargs: Dict[str, Any] = {
-            "query_texts": [query],
-            "n_results": top_k,
-            "include": ["documents", "metadatas", "distances"],
-        }
-        if where:
-            query_kwargs["where"] = where
+        query_terms = _tokenize(query)
+        if not query_terms:
+            return []
 
         try:
-            raw = self._collection.query(**query_kwargs)
+            corpus = self._get_keyword_corpus(where=where)
         except Exception as exc:
-            logger.error("chroma_keyword_query_failed", error=str(exc))
+            logger.error("chroma_keyword_get_failed", error=str(exc))
             raise
 
-        results: List[Dict[str, Any]] = []
-        ids = raw["ids"][0]
-        docs = raw["documents"][0]
-        metas = raw["metadatas"][0]
-        dists = raw["distances"][0]
+        query_phrase = query.lower().strip()
+        scored_results: List[Dict[str, Any]] = []
+        for item in corpus:
+            text = item["text"]
+            text_lower = text.lower()
+            text_terms = set(_tokenize(text_lower))
+            if not text_terms:
+                continue
 
-        for cid, doc, meta, dist in zip(ids, docs, metas, dists):
-            results.append(
+            overlap = sum(1 for term in query_terms if term in text_terms)
+            if overlap == 0 and query_phrase not in text_lower:
+                continue
+
+            phrase_bonus = 2 if query_phrase and query_phrase in text_lower else 0
+            title = str(item["metadata"].get("job_title", "")).lower()
+            metadata_bonus = sum(1 for term in query_terms if term in title)
+            score = overlap + phrase_bonus + metadata_bonus
+            scored_results.append(
                 {
-                    "id": cid,
-                    "text": doc,
-                    "metadata": meta,
-                    "similarity_score": max(0.0, 1.0 - dist / 2.0),
+                    **item,
+                    "similarity_score": score / max(len(query_terms) + 3, 1),
                 }
             )
 
-        return results
+        scored_results.sort(key=lambda result: result["similarity_score"], reverse=True)
+        return scored_results[:top_k]
 
     # ── Utilities ──────────────────────────────────────────────────────────────
 
@@ -161,3 +166,29 @@ class VectorStoreService:
             return self._collection.count() > 0
         except Exception:
             return False
+
+    def _get_keyword_corpus(
+        self,
+        where: Optional[Dict[str, Any]] = None,
+    ) -> List[Dict[str, Any]]:
+        if where is None and self._keyword_cache is not None:
+            return self._keyword_cache
+
+        get_kwargs: Dict[str, Any] = {"include": ["documents", "metadatas"]}
+        if where:
+            get_kwargs["where"] = where
+
+        raw = self._collection.get(**get_kwargs)
+        corpus = [
+            {"id": cid, "text": doc or "", "metadata": meta or {}}
+            for cid, doc, meta in zip(raw["ids"], raw["documents"], raw["metadatas"])
+        ]
+
+        if where is None:
+            self._keyword_cache = corpus
+
+        return corpus
+
+
+def _tokenize(text: str) -> List[str]:
+    return _TOKEN_RE.findall(text.lower())
