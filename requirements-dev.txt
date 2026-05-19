@@ -9,4 +9,6 @@ coverage==7.6.9
 ruff==0.8.3            # Linting + formatting
 mypy==1.13.0           # Type checking
 ipykernel==6.29.5      # Jupyter for notebooks
-
+nbformat>=4.2.0        # Required by Plotly notebook rendering
+plotly==5.24.1         # Interactive report plots
+scikit-learn>=1.6.0    # PCA / evaluation utilities for notebooks
