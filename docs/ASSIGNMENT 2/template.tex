@@ -126,7 +126,7 @@
 }
 
 %%%%%%%%%%%%%%%%   Title   %%%%%%%%%%%%%%%%
-\title{Leapfrog Assignment 1: Diabetes Dataset Classification and Clustering}
+\title{Leapfrog Assignment 2: A Retrieval Augmented Generation (RAG) Pipeline for LF Job Descriptions}
 
 %%%%%%%%%%%%%%%  Author list  %%%%%%%%%%%%%%%
 \usepackage{authblk}
@@ -147,15 +147,13 @@
 \maketitle
 
 \begin{abstract}
-	\textbf{Diabetic labels sit across three classes in the provided dataset: negative(N), pre-diabetic(P), and diabetic(Y). 
-	The preprocessing step strips out patient identifiers which introduced noise and  were irrelevant to the analysis, bins BMI and AGE into groups to capture non-linear relationships, 
-	and runs numeric features through median imputation and standard scaling while one-hot encoding the categorical ones for a consistent representation. 
-	The supervised models i.e. the three classifiers are trained on the processed splits: Random Forest, XGBoost, and SVM. 
-	Each model is evaluated on accuracy, precision, recall, F1 (both weighted and macro), ROC-AUC per class, and precision-recall curves. Model weights and evaluation plots are saved to 
-	disk so results are reproducible without re-running training. On the unsupervised side, the clustering models of the project uses the full dataset rather than the held-out test split. K-Means (with an elbow curve to select k), 
-	Agglomerative Clustering, and a Gaussian Mixture Model each produce cluster assignments that are then compared against the true labels using silhouette score, Davies-Bouldin index, Calinski-Harabasz score, ARI, and NMI. 
-	PCA reduces features to two dimensions for scatter plot visualization, making it possible to see how well the unsupervised structure maps onto the actual class boundaries.
-	This report provides a comprehensive analysis of both supervised and unsupervised approaches to the diabetes dataset, and also aims to serve as a documentation of my entire workflow and engineering decisions.
+	\textbf{This report documents the design, implementation, and evaluation methodology of a Retrieval-Augmented Generation system built for natural-language job search over a structured CSV dataset of 1,000 job listings. 
+	The system takes a user query, retrieves semantically relevant job description chunks from a locally persisted ChromaDB vector store, and passes those chunks as grounded context to a local language model that produces a cited, concise answer. 
+	The ingestion pipeline cleans HTML job descriptions, splits them into overlapping chunks, and embeds them using the BAAI/bge-small-en-v1.5 sentence transformer. 
+	At query time, a hybrid retriever combines dense vector search with keyword scoring, fuses both result sets through Reciprocal Rank Fusion, and reranks candidates with a cross-encoder before prompt construction. 
+	The language model backend is Hugging Face Transformers running Qwen2.5-3B-Instruct locally. 
+	The system is served through a FastAPI application with Pydantic request validation and structured JSON logging. 
+	This report aims to cover the full system architecture, each component in the data flow, prompt design decisions, engineering considerations, evaluation metrics, known limitations, and recommended future improvements.
 }
 \end{abstract}
 

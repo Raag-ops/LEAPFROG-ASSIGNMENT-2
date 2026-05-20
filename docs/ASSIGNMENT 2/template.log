@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.2)  18 MAY 2026 20:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.2)  20 MAY 2026 11:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"d:/School/LaTex/LEAPFROG/ASSIGNMENT 1/template.tex"
-(d:/School/LaTex/LEAPFROG/ASSIGNMENT 1/template.tex
+**"c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex"
+(c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
 (c:/texlive/2025/texmf-dist/tex/latex/base/article.cls
@@ -874,7 +874,6 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 LaTeX Encoding Info:    Redeclaring text command \k (encoding T1) on input line 143.
 Package hyperref Info: Link coloring ON on input line 143.
- (./template.out) (./template.out)
 \@outlinefile=\write4
 \openout4 = `template.out'.
 
@@ -908,91 +907,107 @@ Package: ragged2e 2023/06/22 v3.6 ragged2e Package
 \JustifyingParindent=\skip107
 )
 LaTeX Font Info:    Font shape `T1/txr/b/n' in size <10> not available
-(Font)              Font shape `T1/txr/bx/n' tried instead on input line 166.
+(Font)              Font shape `T1/txr/bx/n' tried instead on input line 164.
 LaTeX Font Info:    Font shape `T1/txr/b/n' in size <12> not available
-(Font)              Font shape `T1/txr/bx/n' tried instead on input line 166.
+(Font)              Font shape `T1/txr/bx/n' tried instead on input line 164.
 LaTeX Font Info:    Font shape `T1/txr/b/sc' in size <12> not available
-(Font)              Font shape `T1/txr/bx/sc' tried instead on input line 166.
+(Font)              Font shape `T1/txr/bx/sc' tried instead on input line 164.
+
+Underfull \hbox (badness 1038) in paragraph at lines 164--164
+[]\T1/txr/bx/n/10 This re-port doc-u-ments the de-sign, im-ple-men-ta-tion, and eval-u-a-tion method-ol-ogy of a Retrieval-
+ []
+
 LaTeX Font Info:    Font shape `T1/txr/b/it' in size <10> not available
-(Font)              Font shape `T1/txr/bx/it' tried instead on input line 166.
-LaTeX Font Info:    Trying to load font information for OT1+txr on input line 179.
- (c:/texlive/2025/texmf-dist/tex/latex/txfonts/ot1txr.fd
+(Font)              Font shape `T1/txr/bx/it' tried instead on input line 164.
+LaTeX Font Info:    Trying to load font information for OT1+txr on input line 177.
+(c:/texlive/2025/texmf-dist/tex/latex/txfonts/ot1txr.fd
 File: ot1txr.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    Trying to load font information for U+txmia on input line 179.
+LaTeX Font Info:    Trying to load font information for U+txmia on input line 177.
  (c:/texlive/2025/texmf-dist/tex/latex/txfonts/utxmia.fd
 File: utxmia.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    Trying to load font information for U+txsya on input line 179.
+LaTeX Font Info:    Trying to load font information for U+txsya on input line 177.
  (c:/texlive/2025/texmf-dist/tex/latex/txfonts/utxsya.fd
 File: utxsya.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    Trying to load font information for U+txsyb on input line 179.
+LaTeX Font Info:    Trying to load font information for U+txsyb on input line 177.
  (c:/texlive/2025/texmf-dist/tex/latex/txfonts/utxsyb.fd
 File: utxsyb.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    Trying to load font information for U+txsyc on input line 179.
+LaTeX Font Info:    Trying to load font information for U+txsyc on input line 177.
  (c:/texlive/2025/texmf-dist/tex/latex/txfonts/utxsyc.fd
 File: utxsyc.fd 2000/12/15 v3.1
 )
-<images/methodology.png, id=75, 658.46pt x 1155.31625pt>
-File: images/methodology.png Graphic file (type png)
-<use images/methodology.png>
-Package pdftex.def Info: images/methodology.png  used on input line 218.
-(pdftex.def)             Requested size: 251.55872pt x 441.36935pt.
- [1{c:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc}
+
+LaTeX Warning: File `images/methodology.png' not found on input line 216.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:216: Package pdftex.def Error: File `images/methodology.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.216 ...width=\linewidth]{images/methodology.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+[1{c:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
 
 ]
-<images/class_distribution.png, id=96, 512.8761pt x 367.6134pt>
-File: images/class_distribution.png Graphic file (type png)
-<use images/class_distribution.png>
-Package pdftex.def Info: images/class_distribution.png  used on input line 233.
-(pdftex.def)             Requested size: 251.55872pt x 180.31163pt.
 
-Underfull \hbox (badness 1383) in paragraph at lines 238--239
+LaTeX Warning: File `images/class_distribution.png' not found on input line 231.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:231: Package pdftex.def Error: File `images/class_distribution.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.231 ...linewidth]{images/class_distribution.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Underfull \hbox (badness 1383) in paragraph at lines 236--237
 \T1/txr/m/n/10 dirty en-tries (non-standard en-tries) and white spaces that
  []
 
-<images/gender.png, id=97, 265.74281pt x 129.48375pt>
-File: images/gender.png Graphic file (type png)
-<use images/gender.png>
-Package pdftex.def Info: images/gender.png  used on input line 242.
-(pdftex.def)             Requested size: 251.55872pt x 122.57417pt.
-<images/class.png, id=98, 839.38594pt x 309.40594pt>
-File: images/class.png Graphic file (type png)
-<use images/class.png>
-Package pdftex.def Info: images/class.png  used on input line 249.
-(pdftex.def)             Requested size: 251.55872pt x 92.72334pt.
-<images/correlation_heatmap.png, id=99, 741.7311pt x 602.4909pt>
-File: images/correlation_heatmap.png Graphic file (type png)
-<use images/correlation_heatmap.png>
-Package pdftex.def Info: images/correlation_heatmap.png  used on input line 262.
-(pdftex.def)             Requested size: 251.55872pt x 204.32936pt.
 
-Package fancyhdr Warning: \headheight is too small (10.84006pt): 
-(fancyhdr)                Make it at least 12.0pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.0pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.15994pt}.
+LaTeX Warning: File `images/gender.png' not found on input line 240.
 
 
-Package fancyhdr Warning: \footskip is too small (0.0pt): 
-(fancyhdr)                Make it at least 3.60004pt, for example:
-(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:240: Package pdftex.def Error: File `images/gender.png' not found: using draft setting.
 
-[2 <./images/methodology.png> <./images/class_distribution.png> <./images/gender.png> <./images/class.png>]
-<images/regplot_cr_urea.png, id=112, 550.2156pt x 322.806pt>
-File: images/regplot_cr_urea.png Graphic file (type png)
-<use images/regplot_cr_urea.png>
-Package pdftex.def Info: images/regplot_cr_urea.png  used on input line 272.
-(pdftex.def)             Requested size: 251.55872pt x 147.58624pt.
-<images/pairplot_cr_urea.png, id=113, 1123.7985pt x 1065.7416pt>
-File: images/pairplot_cr_urea.png Graphic file (type png)
-<use images/pairplot_cr_urea.png>
-Package pdftex.def Info: images/pairplot_cr_urea.png  used on input line 285.
-(pdftex.def)             Requested size: 461.80255pt x 437.94885pt.
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.240 ...hics[width=\linewidth]{images/gender.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/class.png' not found on input line 247.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:247: Package pdftex.def Error: File `images/class.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.247 ...phics[width=\linewidth]{images/class.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 
 Package fancyhdr Warning: \headheight is too small (10.84006pt): 
@@ -1006,12 +1021,51 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.60004pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
-[3 <./images/correlation_heatmap.png> <./images/regplot_cr_urea.png>]
-<images/rf_training_curve.png, id=122, 611.6451pt x 338.9463pt>
-File: images/rf_training_curve.png Graphic file (type png)
-<use images/rf_training_curve.png>
-Package pdftex.def Info: images/rf_training_curve.png  used on input line 357.
-(pdftex.def)             Requested size: 251.55872pt x 139.39815pt.
+[2{c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+
+LaTeX Warning: File `images/correlation_heatmap.png' not found on input line 260.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:260: Package pdftex.def Error: File `images/correlation_heatmap.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.260 ...inewidth]{images/correlation_heatmap.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/regplot_cr_urea.png' not found on input line 270.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:270: Package pdftex.def Error: File `images/regplot_cr_urea.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.270 ...h=\linewidth]{images/regplot_cr_urea.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/pairplot_cr_urea.png' not found on input line 283.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:283: Package pdftex.def Error: File `images/pairplot_cr_urea.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.283 ...9\textwidth]{images/pairplot_cr_urea.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 
 Package fancyhdr Warning: \headheight is too small (10.84006pt): 
@@ -1025,32 +1079,36 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.60004pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
-[4 <./images/pairplot_cr_urea.png>]
-<images/xgb_accuracy_curve.png, id=132, 611.6451pt x 338.9463pt>
-File: images/xgb_accuracy_curve.png Graphic file (type png)
-<use images/xgb_accuracy_curve.png>
-Package pdftex.def Info: images/xgb_accuracy_curve.png  used on input line 364.
-(pdftex.def)             Requested size: 251.55872pt x 139.39815pt.
-<images/svm_learning_curve.png, id=133, 611.6451pt x 338.9463pt>
-File: images/svm_learning_curve.png Graphic file (type png)
-<use images/svm_learning_curve.png>
-Package pdftex.def Info: images/svm_learning_curve.png  used on input line 371.
-(pdftex.def)             Requested size: 251.55872pt x 139.39815pt.
-<images/rf_feature_importance.png, id=134, 742.9356pt x 394.5942pt>
-File: images/rf_feature_importance.png Graphic file (type png)
-<use images/rf_feature_importance.png>
-Package pdftex.def Info: images/rf_feature_importance.png  used on input line 385.
-(pdftex.def)             Requested size: 251.55872pt x 133.60631pt.
-<images/xgb_feature_importance.png, id=135, 727.518pt x 394.5942pt>
-File: images/xgb_feature_importance.png Graphic file (type png)
-<use images/xgb_feature_importance.png>
-Package pdftex.def Info: images/xgb_feature_importance.png  used on input line 392.
-(pdftex.def)             Requested size: 251.55872pt x 136.43619pt.
-<images/pca.png, id=136, 599.23875pt x 441.14813pt>
-File: images/pca.png Graphic file (type png)
-<use images/pca.png>
-Package pdftex.def Info: images/pca.png  used on input line 416.
-(pdftex.def)             Requested size: 251.55872pt x 185.19344pt.
+[3]
+
+LaTeX Warning: File `images/rf_training_curve.png' not found on input line 355.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:355: Package pdftex.def Error: File `images/rf_training_curve.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.355 ...\linewidth]{images/rf_training_curve.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/xgb_accuracy_curve.png' not found on input line 362.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:362: Package pdftex.def Error: File `images/xgb_accuracy_curve.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.362 ...linewidth]{images/xgb_accuracy_curve.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 
 Package fancyhdr Warning: \headheight is too small (10.84006pt): 
@@ -1064,27 +1122,51 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.60004pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
-[5 <./images/rf_training_curve.png> <./images/xgb_accuracy_curve.png> <./images/svm_learning_curve.png> <./images/rf_feature_importance.png> <./images/xgb_feature_importance.png>]
-<images/kmeans_elbow_curve.png, id=154, 570.933pt x 353.1594pt>
-File: images/kmeans_elbow_curve.png Graphic file (type png)
-<use images/kmeans_elbow_curve.png>
-Package pdftex.def Info: images/kmeans_elbow_curve.png  used on input line 427.
-(pdftex.def)             Requested size: 251.55872pt x 155.60616pt.
-<images/kmeans_clusters.png, id=155, 570.933pt x 425.1885pt>
-File: images/kmeans_clusters.png Graphic file (type png)
-<use images/kmeans_clusters.png>
-Package pdftex.def Info: images/kmeans_clusters.png  used on input line 441.
-(pdftex.def)             Requested size: 251.55872pt x 187.34302pt.
-<images/hierarchical_clusters.png, id=156, 570.933pt x 425.1885pt>
-File: images/hierarchical_clusters.png Graphic file (type png)
-<use images/hierarchical_clusters.png>
-Package pdftex.def Info: images/hierarchical_clusters.png  used on input line 448.
-(pdftex.def)             Requested size: 251.55872pt x 187.34302pt.
-<images/gmm_clusters.png, id=157, 570.933pt x 425.1885pt>
-File: images/gmm_clusters.png Graphic file (type png)
-<use images/gmm_clusters.png>
-Package pdftex.def Info: images/gmm_clusters.png  used on input line 455.
-(pdftex.def)             Requested size: 251.55872pt x 187.34302pt.
+[4]
+
+LaTeX Warning: File `images/svm_learning_curve.png' not found on input line 369.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:369: Package pdftex.def Error: File `images/svm_learning_curve.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.369 ...linewidth]{images/svm_learning_curve.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/rf_feature_importance.png' not found on input line 383.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:383: Package pdftex.def Error: File `images/rf_feature_importance.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.383 ...ewidth]{images/rf_feature_importance.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/xgb_feature_importance.png' not found on input line 390.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:390: Package pdftex.def Error: File `images/xgb_feature_importance.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.390 ...width]{images/xgb_feature_importance.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 
 Package fancyhdr Warning: \headheight is too small (10.84006pt): 
@@ -1098,17 +1180,51 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.60004pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
-[6 <./images/pca.png> <./images/kmeans_elbow_curve.png> <./images/kmeans_clusters.png> <./images/hierarchical_clusters.png> <./images/gmm_clusters.png>]
-<images/confusion_matrices_labeled.png, id=172, 1293.633pt x 353.1594pt>
-File: images/confusion_matrices_labeled.png Graphic file (type png)
-<use images/confusion_matrices_labeled.png>
-Package pdftex.def Info: images/confusion_matrices_labeled.png  used on input line 523.
-(pdftex.def)             Requested size: 201.24773pt x 54.9385pt.
-<images/model_comparison.png, id=173, 1004.553pt x 497.4585pt>
-File: images/model_comparison.png Graphic file (type png)
-<use images/model_comparison.png>
-Package pdftex.def Info: images/model_comparison.png  used on input line 583.
-(pdftex.def)             Requested size: 513.11743pt x 254.11037pt.
+[5]
+
+LaTeX Warning: File `images/pca.png' not found on input line 414.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:414: Package pdftex.def Error: File `images/pca.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.414 ...raphics[width=\linewidth]{images/pca.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/kmeans_elbow_curve.png' not found on input line 425.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:425: Package pdftex.def Error: File `images/kmeans_elbow_curve.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.425 ...linewidth]{images/kmeans_elbow_curve.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/kmeans_clusters.png' not found on input line 439.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:439: Package pdftex.def Error: File `images/kmeans_clusters.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.439 ...h=\linewidth]{images/kmeans_clusters.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 
 Package fancyhdr Warning: \headheight is too small (10.84006pt): 
@@ -1122,22 +1238,36 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.60004pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
-[7 <./images/confusion_matrices_labeled.png>]
-<images/roc_auc_curve_comparison.png, id=191, 715.473pt x 497.6994pt>
-File: images/roc_auc_curve_comparison.png Graphic file (type png)
-<use images/roc_auc_curve_comparison.png>
-Package pdftex.def Info: images/roc_auc_curve_comparison.png  used on input line 594.
-(pdftex.def)             Requested size: 251.55872pt x 174.9872pt.
-<images/clustering_model_comparison.png, id=192, 1325.4318pt x 445.665pt>
-File: images/clustering_model_comparison.png Graphic file (type png)
-<use images/clustering_model_comparison.png>
-Package pdftex.def Info: images/clustering_model_comparison.png  used on input line 635.
-(pdftex.def)             Requested size: 513.11743pt x 172.53699pt.
-<images/actual_vs_cluster_comparison.png, id=193, 1581.9903pt x 371.4678pt>
-File: images/actual_vs_cluster_comparison.png Graphic file (type png)
-<use images/actual_vs_cluster_comparison.png>
-Package pdftex.def Info: images/actual_vs_cluster_comparison.png  used on input line 642.
-(pdftex.def)             Requested size: 513.11743pt x 120.48753pt.
+[6]
+
+LaTeX Warning: File `images/hierarchical_clusters.png' not found on input line 446.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:446: Package pdftex.def Error: File `images/hierarchical_clusters.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.446 ...ewidth]{images/hierarchical_clusters.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/gmm_clusters.png' not found on input line 453.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:453: Package pdftex.def Error: File `images/gmm_clusters.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.453 ...idth=\linewidth]{images/gmm_clusters.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 
 Package fancyhdr Warning: \headheight is too small (10.84006pt): 
@@ -1151,7 +1281,55 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.60004pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
-[8 <./images/model_comparison.png> <./images/roc_auc_curve_comparison.png>]
+[7]
+
+LaTeX Warning: File `images/confusion_matrices_labeled.png' not found on input line 521.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:521: Package pdftex.def Error: File `images/confusion_matrices_labeled.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.521 ...h]{images/confusion_matrices_labeled.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/model_comparison.png' not found on input line 581.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:581: Package pdftex.def Error: File `images/model_comparison.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.581 ...=\textwidth]{images/model_comparison.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: Reference `fig:model_comparison' on page 8 undefined on input line 586.
+
+
+LaTeX Warning: File `images/roc_auc_curve_comparison.png' not found on input line 592.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:592: Package pdftex.def Error: File `images/roc_auc_curve_comparison.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.592 ...dth]{images/roc_auc_curve_comparison.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
 
 Package fancyhdr Warning: \headheight is too small (10.84006pt): 
 (fancyhdr)                Make it at least 12.0pt, for example:
@@ -1164,8 +1342,54 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.60004pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
-[9 <./images/clustering_model_comparison.png> <./images/actual_vs_cluster_comparison.png>]
-Underfull \hbox (badness 1048) in paragraph at lines 756--757
+[8]
+
+LaTeX Warning: File `images/clustering_model_comparison.png' not found on input line 633.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:633: Package pdftex.def Error: File `images/clustering_model_comparison.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.633 ...]{images/clustering_model_comparison.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: File `images/actual_vs_cluster_comparison.png' not found on input line 640.
+
+
+c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex:640: Package pdftex.def Error: File `images/actual_vs_cluster_comparison.png' not found: using draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.640 ...{images/actual_vs_cluster_comparison.png}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: Reference `tab:unsupervised_metrics' on page 9 undefined on input line 705.
+
+
+Package fancyhdr Warning: \headheight is too small (10.84006pt): 
+(fancyhdr)                Make it at least 12.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.0pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.15994pt}.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[9]
+Underfull \hbox (badness 1048) in paragraph at lines 754--755
 \T1/txr/m/n/10 SMOTE (Syn-thetic Mi-nor-ity Over-sampling Tech-
  []
 
@@ -1194,9 +1418,61 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.60004pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
-[11{c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
+[11
 
 ]
+
+Package fancyhdr Warning: \headheight is too small (10.84006pt): 
+(fancyhdr)                Make it at least 12.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.0pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.15994pt}.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[12]
+
+Package fancyhdr Warning: \headheight is too small (10.84006pt): 
+(fancyhdr)                Make it at least 12.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.0pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.15994pt}.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[13]
+
+Package fancyhdr Warning: \headheight is too small (10.84006pt): 
+(fancyhdr)                Make it at least 12.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.0pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.15994pt}.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[14]
+
+Package fancyhdr Warning: \headheight is too small (10.84006pt): 
+(fancyhdr)                Make it at least 12.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.0pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.15994pt}.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[15]
 
 Package caption Warning: Unused \captionsetup[sub] on input line 105.
 See the caption package documentation for explanation.
@@ -1206,22 +1482,35 @@ See the caption package documentation for explanation.
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
-Package rerunfilecheck Info: File `template.out' has not changed.
-(rerunfilecheck)             Checksum: 579E129F66505E65BE516B49AADF6E19;2600.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `template.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `template.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  579E129F66505E65BE516B49AADF6E19;2600.
  ) 
 Here is how much of TeX's memory you used:
- 26695 strings out of 467533
- 483768 string characters out of 5423669
- 889101 words of memory out of 5000000
- 55047 multiletter control sequences out of 15000+600000
+ 27198 strings out of 467533
+ 503733 string characters out of 5423669
+ 885832 words of memory out of 5000000
+ 55550 multiletter control sequences out of 15000+600000
  688702 words of font info for 110 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 132i,16n,135p,523b,1152s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxbsc.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxsc.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/txex.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/txsy.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/txsyc.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on template.pdf (11 pages, 5675417 bytes).
+ 132i,16n,135p,549b,1176s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxb.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxbsc.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxsc.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/txex.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/txsy.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/txsyc.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on template.pdf (15 pages, 158096 bytes).
 PDF statistics:
- 301 PDF objects out of 1000 (max. 8388607)
- 217 compressed objects within 3 object streams
- 76 named destinations out of 1000 (max. 500000)
- 259 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 224 PDF objects out of 1000 (max. 8388607)
+ 179 compressed objects within 2 object streams
+ 80 named destinations out of 1000 (max. 500000)
+ 13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
