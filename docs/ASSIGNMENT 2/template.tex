@@ -1,0 +1,824 @@
+﻿\documentclass{article}
+
+\usepackage{preprint}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[natbibapa]{apacite}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{balance}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{subcaption}
+\raggedbottom
+
+% Fix fancyhdr warnings
+\setlength{\headheight}{12pt}
+\setlength{\footskip}{4pt}
+
+% Make \text{...} in math mode italic globally
+\let\textupright\text
+\renewcommand{\text}[1]{\mathit{#1}}
+
+% Equation number style: dotted leader + small roman numerals
+\renewcommand{\theequation}{\roman{equation}}
+\makeatletter
+\def\tagform@#1{%
+	\maketag@@@{\normalfont\scriptsize(#1)}%
+}
+\newdimen\eqnwidth@
+\def\set@gather@field{%
+	\iftagsleft@
+		\global\lineht@\ht\z@
+	\else
+		\global\lineht@\dp\z@
+	\fi
+	\global\eqnwidth@\wdz@
+	\kern\eqnshift@
+	\boxz@
+	\hfil
+}
+\def\dot@tagbox{%
+	\begingroup
+	\dimen@\displaywidth
+	\advance\dimen@-\eqnshift@
+	\advance\dimen@-\eqnwidth@
+	\ifdim\dimen@<\z@ \dimen@\z@ \fi
+	\hbox to \dimen@{\dotfill\hspace{0.4em}\boxz@}%
+	\endgroup
+}
+\def\place@tag@gather{%
+	\iftagsleft@
+		\kern-\gdisplaywidth@
+		\ifshifttag@
+			\rlap{\vbox{%
+				\normalbaselines
+				\boxz@
+				\vbox to\lineht@{}%
+				\raise@tag
+			}}%
+			\global\shifttag@false
+		\else
+			\rlap{\boxz@}%
+		\fi
+	\else
+		\ifdim\totwidth@>\displaywidth
+			\dimen@\totwidth@
+			\advance\dimen@-\displaywidth
+			\kern-\dimen@
+		\fi
+		\ifshifttag@
+			\llap{\vtop{%
+				\raise@tag
+				\normalbaselines
+				\setbox\@ne\null
+				\dp\@ne\lineht@
+				\box\@ne
+				\boxz@
+			}}%
+			\global\shifttag@false
+		\else
+			\llap{\dot@tagbox}%
+		\fi
+	\fi
+}
+\makeatother
+
+% colors for hyperlinks
+\hypersetup{colorlinks=true, linkcolor=purple, urlcolor=blue, citecolor=cyan, anchorcolor=black}
+
+\usepackage[utf8]{inputenc}	% allow utf-8 input
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{lineno}					% Line numbers
+\usepackage{tikz} 					% ORCiD insertion
+
+ %% Special figure caption options
+\usepackage{newfloat}
+\DeclareFloatingEnvironment[name={Supplementary Figure}]{suppfigure}
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{c}
+\usepackage{subcaption}
+\captionsetup{font=small, labelfont=it, textfont=it}
+\setlength{\dbltextfloatsep}{8pt}
+\setlength{\dblfloatsep}{8pt}
+
+% Section title spacing  options
+\usepackage{titlesec}
+\titlespacing\section{0pt}{12pt plus 3pt minus 3pt}{1pt plus 1pt minus 1pt}
+\titlespacing\subsection{0pt}{10pt plus 3pt minus 3pt}{1pt plus 1pt minus 1pt}
+\titlespacing\subsubsection{0pt}{8pt plus 3pt minus 3pt}{1pt plus 1pt minus 1pt}
+\renewcommand{\labelitemi}{\raisebox{0.2ex}{\scriptsize$\bullet$}}
+
+\definecolor{lime}{HTML}{A6CE39}
+\DeclareRobustCommand{\orcidicon}{
+	\begin{tikzpicture}
+	\draw[lime, fill=lime] (0,0)
+	circle [radius=0.16]
+	node[white] {{\fontfamily{qag}\selectfont \tiny ID}};
+	\draw[white, fill=white] (-0.0625,0.095)
+	circle [radius=0.007];
+	\end{tikzpicture}
+	\hspace{-2mm}
+}
+
+%%%%%%%%%%%%%%%%   Title   %%%%%%%%%%%%%%%%
+\title{Leapfrog Assignment 1: Diabetes Dataset Classification and Clustering}
+
+%%%%%%%%%%%%%%%  Author list  %%%%%%%%%%%%%%%
+\usepackage{authblk}
+\renewcommand*{\Authfont}{\bfseries}
+
+\author{
+	Raag Yatchu Maharjan
+}
+
+
+\affil{Leapfrog Technology Inc., KTM}
+
+%%%%%%%%%%%%%%    Front matter    %%%%%%%%%%%%%%
+\begin{document}
+
+\twocolumn[\begin{@twocolumnfalse}
+
+\maketitle
+
+\begin{abstract}
+	\textbf{Diabetic labels sit across three classes in the provided dataset: negative(N), pre-diabetic(P), and diabetic(Y). 
+	The preprocessing step strips out patient identifiers which introduced noise and  were irrelevant to the analysis, bins BMI and AGE into groups to capture non-linear relationships, 
+	and runs numeric features through median imputation and standard scaling while one-hot encoding the categorical ones for a consistent representation. 
+	The supervised models i.e. the three classifiers are trained on the processed splits: Random Forest, XGBoost, and SVM. 
+	Each model is evaluated on accuracy, precision, recall, F1 (both weighted and macro), ROC-AUC per class, and precision-recall curves. Model weights and evaluation plots are saved to 
+	disk so results are reproducible without re-running training. On the unsupervised side, the clustering models of the project uses the full dataset rather than the held-out test split. K-Means (with an elbow curve to select k), 
+	Agglomerative Clustering, and a Gaussian Mixture Model each produce cluster assignments that are then compared against the true labels using silhouette score, Davies-Bouldin index, Calinski-Harabasz score, ARI, and NMI. 
+	PCA reduces features to two dimensions for scatter plot visualization, making it possible to see how well the unsupervised structure maps onto the actual class boundaries.
+	This report provides a comprehensive analysis of both supervised and unsupervised approaches to the diabetes dataset, and also aims to serve as a documentation of my entire workflow and engineering decisions.
+}
+\end{abstract}
+
+\keywords{\textit{Supervised, Unsupervised, Random Forest, XGBoost, SVM, K-Means, Gaussian Mixture Model, Agglomerative Clustering, PCA, feature engineering}}
+
+\vspace{0.5cm}
+
+\end{@twocolumnfalse}]
+
+%%%%%%%%%%%%%%%  Main text   %%%%%%%%%%%%%%%
+
+\section{Introduction}
+ 
+\subsection{Background}
+
+Diabetes is one of the most common chronic diseases worldwide and early detection is important for reducing complications and improving healthcare outcomes.
+Machine learning techniques can assist healthcare systems by identifying patterns in patient data and supporting predictive analysis.
+
+This project focuses on:
+\begin{itemize}
+    \item Exploratory analysis of diabetes data
+    \item Data preprocessing and feature engineering
+    \item Supervised classification for diabetes prediction
+    \item Unsupervised clustering for patient segmentation
+    \item Model evaluation and comparison
+\end{itemize}
+
+The project follows a complete end-to-end machine learning workflow beginning with exploratory data analysis (EDA), followed by data cleaning, preprocessing, feature engineering, model training, evaluation, and visualization. 
+Different statistical and visual analysis techniques are applied throughout the workflow to better understand the dataset and interpret model performance.
+
+The project is implemented using Python and Jupyter notebooks with libraries such as Scikit-learn, XGBoost, Pandas, NumPy, Seaborn, Plotly, and Sweetviz.
+I aim to provide a comprehensive analysis of the diabetes dataset using both supervised and unsupervised machine learning techniques, 
+and to document my workflow and engineering decisions throughout the process. 
+ 
+\subsection{Objectives}
+My objectives of this assignment are to:
+\begin{enumerate}
+    \item Perform exploratory data analysis on the provided diabetes dataset.
+    \item Prepare and preprocess the data for machine learning tasks.
+    \item Train multiple classification models to predict diabetes classes.
+    \item Apply clustering techniques to discover hidden structures in the dataset.
+    \item Evaluate classification and clustering models using standard metrics.
+    \item Visualize the results and provide insights.
+\end{enumerate}
+
+\section{Methodology}
+The provided data source is a CSV of clinical diabetes records. Each row consists of a patient with the target column, CLASS, which takes three values: N (non-diabetic), P (pre-diabetic), and Y (diabetic).
+Features of the records consists of demographic information (AGE, Gender) and clinical measures capturing BMI and lipid profiles in addition to other physiological indicators.
+The methodology of this project is structured into two main parts: 4 main phases. They are as follows:
+\begin{itemize}
+	\item EDA and Data Preprocessing
+	\item Model Building Phase
+	\item Model Evaluation Phase
+	\item Documentation and Interpretation Phase
+\end{itemize}
+
+The entire methodology is shown in the process flow diagram below:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/methodology.png}
+	\caption{Process Flow Diagram of the Methodology}
+	\label{fig:process_flow}
+\end{figure}
+
+\subsection{EDA and Data Preprocessing}
+\subsubsection*{Exploratory Data Analysis:}
+
+EDA (Exploratory Data Analysis) refers to the initial phase of data analysis where we explore the dataset to understand its structure, identify patterns, and detect anomalies.
+
+In the context of this project, EDA of the provided dataset involved examining the distribution of features, checking for missing values, and visualizing relationships between features and the target variable (CLASS).
+
+From the preliminary analysis, it was observed that the dataset had a significant class imbalance, with a higher proportion of diabetic patients compared to non-diabetic and pre-diabetic patients.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/class_distribution.png}
+	\caption{Class Distribution in the Dataset}
+	\label{fig:class_distribution}
+\end{figure}
+
+Also looking at the entire data profile report obtained from Sweetviz, I found that 2 columns (Gender and CLASS) had dirty entries (non-standard entries) and white spaces that needed to be cleaned up.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/gender.png}
+	\caption{Dirty Entries in Gender Column}
+	\label{fig:gender_dirty}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/class.png}
+	\caption{Dirty Entries in CLASS Column}
+	\label{fig:class_dirty}
+\end{figure}
+
+I also computed the correlation matrix of the features to understand how they relate to each other and to the target variable. 
+The corelation matrix revealed that Urea and Cr had a strong positive correlation, which could be useful for feature selection and model training.
+
+Other moderately correlated features included BMI and Age, which are known risk factors for diabetes. After identifying these relationships,
+I proceeded to pairplot and scatter plot them to futher investigate the nature of their relationships.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/correlation_heatmap.png}
+	\caption{Correlation Matrix of the Features}
+	\label{fig:correlation_matrix}
+\end{figure}
+
+Scatter plotting the strongly correlated features i.e. Urea and Cr with a regression line revealed a clear positive linear reltionship between them.
+This suggests that they may be capturing similar information about the patients' kidney function, which is relevant for diabetes prediction.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/regplot_cr_urea.png}
+	\caption{Scatter Plot of Urea vs Cr with Regression Line}
+	\label{fig:urea_cr_scatter}
+\end{figure}
+
+Moving on to the moderately correlated features, I plotted a pairplot of all the features with CLASS as the hue to visualize how they relate to the target variable.
+
+The pairplot revealed that BMI and HbA1c had some separation between the classes, while other features showed more overlap.
+
+This tells us that BMI and HbA1c could be important features for classification, while the others may require more complex modeling to capture their relationships with the target variable.
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=0.9\textwidth]{images/pairplot_cr_urea.png}
+	\caption{Pairplot of Features with CLASS as Hue}
+	\label{fig:pairplot}
+\end{figure*}
+
+After the end of EDA the information on the dataset which I managed to obtain can be summarized as follows:
+
+\subsubsection*{Data Characteristics:}
+		\begin{itemize}
+			\item The dataset contains 1000 records with 13 features and a target variable (CLASS) that has three classes: N, P, and Y.
+			\item Heavily imbalanced dataset with more diabetic patients (Y) than non-diabetic (N) and pre-diabetic (P) patients.
+			\item Non-linear patterns and very frequent overlap between classes in the feature space, suggesting that simple linear models may not perform well.
+			\item Numerous outliers present throughout the features.
+			\item Non-consolidated and dirty entries in the AGE and Gender columns.
+			\item ID and Patient\_ID columns are irrelevant to the analysis and contain noise.
+		\end{itemize}
+
+\subsubsection*{Feature Relationships:}
+		\begin{itemize}
+			\item HbA1c appeared to be the most separating feature between the classes, followed by BMI.
+			\item Gathered meaningful relationships between features with most with moderately positive correlation, and a few with strong positive correlation (Urea and Cr).
+		\end{itemize}
+
+From the above information, insights I could gather from the EDA phase which are necessary for the next steps are as follows:
+\subsubsection*{Insights:}
+		\begin{itemize}
+			\item \textbf{Class Imbalance}: Entails the need for weighted evaluation and stratified splitting.
+			\item \textbf{Non-linear Relationships}: Suggests the need for non-linear models and robust preprocessing (binning).
+			\item \textbf{Outliers}: Necessitates the use of robust imputation and scaling techniques.
+			\item \textbf{Dirty Entries}: Requires data cleaning and standardization.
+			\item \textbf{Irrelevant Features}: Calls for feature selection and removal of ID columns.
+		\end{itemize}
+
+\subsubsection*{Data Preprocessing:}
+
+After the EDA phase, I proceeded to preprocess the data based on the insights obtained.
+The preprocessing steps I applied to the dataset are as follows:
+\begin{itemize}
+	\item \textbf{Data Cleaning}: Cleaned and consolidated the entries in the CLASS and Gender.
+	\item \textbf{Feature Selection}: Removed the ID and Patient\_ID columns as they were irrelevant to the analysis and introduced noise.
+	\item \textbf{Binning}: Binned the AGE and BMI features into groups to capture non-linear relationships and reduce the impact of outliers.
+	\item \textbf{Imputation and Scaling}: Applied median imputation and standardization to numeric features.
+	\item \textbf{Encoding}: One-hot encoded the categorical features for a consistent representation.
+\end{itemize}
+
+After preprocessing, the dataset was ready for model training and evaluation. 
+The cleaned and processed data was then split into training and testing sets using stratified sampling to maintain the class distribution.
+
+\subsection{Model Development Process}
+The preprocessed data was split into 3 sets, the training set, the validation set, and the test set.
+The training set was used to train the models, the validation set was used for model validation, and the test set was used for final evaluation.
+The splits were in the ratio of 7:1:2 for training, validation, and testing respectively.
+
+\subsection*{Model Building Phase:}
+For the scope of this project, I implemented a classification and clustering pipeline as I was instructed.
+
+Classification models are a type of supervised learning algorithm that are used to predict the class labels of new instances based on the patterns learned from the training data.
+Clustering models are a type of unsupervised learning algorithm that are used to group similar instances together based on their features without using class labels.
+
+\subsubsection*{Supervised Models:}
+The supervised models I implemented for classification are:
+\begin{enumerate}
+	\item Random Forest Classifier
+	\item XGBoost Classifier
+	\item Support Vector Machine (SVM) Classifier
+\end{enumerate}
+
+The supervised models needed to be trained on splits of the data so as to prevent data leakage and allow for proper evaluation.
+The training characteristic curves of the models are as follows:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/rf_training_curve.png}
+	\caption{Training Curve of the Random Forest Classifier}
+	\label{fig:rf_training_curve}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/xgb_accuracy_curve.png}
+	\caption{Training Curve of the XGBoost Classifier}
+	\label{fig:xgb_accuracy_curve}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/svm_learning_curve.png}
+	\caption{Training Curve of the SVM Classifier}
+	\label{fig:svm_training_curve}
+\end{figure}
+
+From the above training curves, we can see that all three models are learning and improving their performance on the training data over time.
+The validation curve is also catching up with the training curve, which suggests that the models are not overfitting and are generalizing well to unseen data.
+
+After training the models, their weights were saved to disk for a reproducible evaluation without the need to re-run training. This also allows for easy comparison of the models' performance on the test set.
+
+Feature importance plots were also generated for the Random Forest and XGBoost models to understand which features were most influential in the classification process.
+The feature importance plots are as follows:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/rf_feature_importance.png}
+	\caption{Feature Importance of the Random Forest Classifier}
+	\label{fig:rf_feature_importance}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/xgb_feature_importance.png}
+	\caption{Feature Importance of the XGBoost Classifier}
+	\label{fig:xgb_feature_importance}
+\end{figure}
+
+As we predicted in the EDA phase, HbA1c and BMI are among the most important features for both models, which aligns with our understanding of diabetes risk factors.
+
+AGE binning also helped to capture the non-linear relationship between age and diabetes risk, as the binned AGE feature also appears in the top important features for both models.
+
+SVM does not provide feature importance in the same way as tree-based models as it is a linear model.
+
+\subsubsection*{Unsupervised Models:}
+The unsupervised models I implemented for clustering are:
+\begin{enumerate}
+	\item K-Means Clustering
+	\item Agglomerative Clustering
+	\item Gaussian Mixture Model (GMM)
+\end{enumerate}
+
+The unsupervised models were trained on the full dataset rather than the held-out test split since they do not use class labels and are meant to discover hidden structures in the data.
+PCA was applied to reduce the dimensionality of the data to two dimensions for scatter plot visualization, making it possible to see how well the unsupervised structure maps onto the actual class boundaries.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/pca.png}
+	\caption{PCA Visualization of Clusters}
+	\label{fig:pca_visualization}
+\end{figure}
+
+From the PCA visualization, we can see that there is some separation between the classes, but there is also a lot of overlap, which suggests that the clusters may not perfectly align with the true class labels.
+
+For the K-Means model, I also plotted an elbow curve to select the optimal number of clusters (k) based on the within-cluster sum of squares (WCSS).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/kmeans_elbow_curve.png}
+	\caption{Elbow Curve for K-Means Clustering}
+	\label{fig:elbow_curve}
+\end{figure}
+
+But as we can see from the elbow curve, there is no clear elbow point, which suggests that there may not be a well-defined number of clusters in the data.
+Hence, I used K-value of 3 for K-Means clustering to match the number of classes in the target variable.
+
+For the Agglomerative Clustering and GMM, I also set the number of clusters to 3 for consistency and comparison with K-Means.
+
+The clusters produced by each model are as follows:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/kmeans_clusters.png}
+	\caption{Clusters produced by K-Means Clustering}
+	\label{fig:kmeans_clusters}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/hierarchical_clusters.png}
+	\caption{Clusters produced by Agglomerative Clustering}
+	\label{fig:agglomerative_clusters}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/gmm_clusters.png}
+	\caption{Clusters produced by Gaussian Mixture Model}
+	\label{fig:gmm_clusters}
+\end{figure}
+
+Each of the clustering models produce a similar clustering structure, with some overlap between the clusters, which is consistent with the PCA visualization and the nature of the data.
+
+We can also see an oblong shape along the first principal component, which suggests that there may be some underlying structure in the data that is not captured by the original features.
+
+There also seems to be some outliers in the data which do not clearly belong to any of the clusters.
+This is a limitation of the clustering models, as they may struggle to assign these outliers to a cluster, which can affect the overall performance and interpretation of the clusters.
+
+Each of the clustering models were also saved to disk for reproducibility and further analysis without the need to re-run training.
+
+\subsection{Model Evaluation Process}
+After traning the supervised and unsupervised models, I proceeded to evaluate their performance using standard metrics.
+There are various different metrics for evaluating classification and clustering models, and I used a combination of them to get a comprehensive understanding of the models' performance.
+
+\subsubsection*{Evaluation of Supervised Models:}
+The supervised models were evaluated using the following metrics:
+
+\textit{\textbf{1. Accuracy:}}
+
+The proportion of correct predictions out of the total preditctions made. Mathematically, 
+\begin{equation} 
+	\mathit{Accuracy} = \frac{\mathit{TP} + \mathit{TN}}{\mathit{TP} + \mathit{TN} + \mathit{FP} + \mathit{FN}} 
+\end{equation}
+
+\textit{\textbf{2. Precision:}}
+
+The proportion of true positive predictions out of all positive predictions made. Mathematically,
+\begin{equation}
+	\mathit{Precision} = \frac{\mathit{TP}}{\mathit{TP} + \mathit{FP}}
+\end{equation}
+
+\textit{\textbf{3. Recall:}}
+
+The proportion of true positive predictions out of all actual positive instances. Mathematically,
+\begin{equation}
+	\mathit{Recall} = \frac{\mathit{TP}}{\mathit{TP} + \mathit{FN}}
+\end{equation}
+
+\textit{\textbf{4. F1 Score:}}
+
+The harmonic mean of precision and recall, providing a balance between the two. Mathematically,
+\begin{equation}
+	\mathit{F1} = 2 \times \frac{\mathit{Precision} \times \mathit{Recall}}{\mathit{Precision} + \mathit{Recall}}
+\end{equation}
+
+\textit{\textbf{5. ROC-AUC:}}
+
+The area under the receiver operating characteristic curve, which plots the true positive rate against the false positive rate at various threshold settings. A higher AUC indicates better model performance.
+\begin{equation}
+	\mathit{AUC} = \int_{0}^{1} \mathit{TPR}(FPR) \, dFPR
+\end{equation}
+
+\textit{Where, \newline
+	$TP$ denotes true positives.
+	$TN$ denotes true negatives.
+	$FP$ denotes false positives.
+	$FN$ denotes false negatives.
+	}
+
+All of which were obtained from the confusion matrix of the models' predictions on the test set, and were calculated for each class as well as in a weighted and macro-averaged manner to account for class imbalance.
+The confusion matrix for each model are as follows:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{images/confusion_matrices_labeled.png}
+	\caption{Confusion Matrices of the Supervised Models}
+	\label{fig:confusion_matrices}
+\end{figure}
+
+The evaluation results of the supervised models are tabulated below:
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Per-class precision, recall, and F1-score.}
+\label{tab:classification_report}
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}Xccc}
+\toprule
+Class & Precision & Recall & F1-score \\
+\midrule
+\multicolumn{4}{l}{\textbf{Random Forest}} \\
+N & 1.00 & 1.00 & 1.00 \\
+P & 1.00 & 0.90 & 0.95 \\
+Y & 0.99 & 1.00 & 1.00 \\
+\addlinespace
+\multicolumn{4}{l}{\textbf{XGBoost}} \\
+N & 1.00 & 0.90 & 0.95 \\
+P & 1.00 & 0.90 & 0.95 \\
+Y & 0.98 & 1.00 & 0.99 \\
+\addlinespace
+\multicolumn{4}{l}{\textbf{SVM}} \\
+N & 0.79 & 0.90 & 0.84 \\
+P & 0.58 & 0.70 & 0.64 \\
+Y & 0.99 & 0.96 & 0.97 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+As predicted during the EDA phase, the Random Forest and XGBoost models performed very well with high precision, recall, and F1-scores across all classes, while the SVM model struggled with the pre-diabetic class (P) due to the non-linear relationships and class imbalance in the data.
+
+Linear models like SVM may not capture the complex patterns in the data as effectively as tree-based models, which can handle non-linear relationships and interactions between features.
+So this is consistent with our understanding of the data and the nature of the models.
+
+The ROC-AUC (Micro-Average) scores for each class and model are as follows:
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Micro-average ROC-AUC for each supervised model.}
+\label{tab:auc_micro}
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}Xc}
+\toprule
+Model & Micro-average AUC \\
+\midrule
+Random Forest & 0.999 \\
+XGBoost & 0.999 \\
+SVM & 0.995 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=\textwidth]{images/model_comparison.png}
+	\caption{Bar Charts Comparing the Evaluation Metrics of the Supervised Models}
+	\label{fig:model_comparison}
+\end{figure*}
+
+Figure \ref{fig:model_comparison} shows a bar chart comparing the evaluation metrics of the three supervised models, 
+which clearly illustrates the superior performance of the Random Forest and XGBoost models compared to SVM, especially in terms of precision, recall, 
+and F1-score. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/roc_auc_curve_comparison.png}
+	\caption{ROC Curves for the Supervised Models}
+	\label{fig:roc_curves}
+\end{figure}
+
+All 3 models achieved very high ROC-AUC scores, i.e. close to 1, which indicates that they are performing well in distinguishing between the classes.
+Values closer to 0.5 would indicate that the model is performing no better than random guessing.
+
+\subsubsection{Evaluation of Unsupervised Models:}
+
+Evaluation of unsupervised models is more different than supervised models since we do not have true class labels to compare against.
+There is no dedicated metric to evaluate the accuracy of clustering models, but we can usea combination of internal and external metrics to assess the quality of the clusters.
+The unsupervised models were evaluated using the following metrics:
+
+\textit{\textbf{1. Silhouette Score:}}
+
+Measures how similar an instance is to its own cluster compared to other clusters. A higher silhouette score indicates better-defined clusters. Mathematically,
+\begin{equation}
+	\mathit{Silhouette} = \frac{b - a}{\max(a, b)}
+\end{equation}
+
+\textit{Where:\\
+	$a$ : the average distance between an instance and all other instances in the same cluster (intra-cluster distance).\\
+	$b$ : the average distance between an instance and all other instances in the nearest cluster (inter-cluster distance).
+}
+
+\textit{\textbf{2. Davies-Bouldin Index:}}
+
+Measures the average similarity between clusters. A lower Davies-Bouldin index indicates better clustering. Mathematically,
+\begin{equation}
+	\mathit{DB} = \frac{1}{k} \sum_{i=1}^{k} \max_{j \neq i} \left( \frac{\sigma_i + \sigma_j}{d(c_i, c_j)} \right)
+\end{equation}
+
+\textit{Where:\\
+	$k$ : the number of clusters.\\
+	$\sigma_i$ : the average distance between instances in cluster $i$ and the centroid of cluster $i$.\\
+	$d(c_i, c_j)$: the distance between the centroids of clusters $i$ and $j$.
+}
+
+\begin{figure*}[!t]
+	\centering
+	\includegraphics[width=\textwidth]{images/clustering_model_comparison.png}
+	\caption{Bar Charts Comparing the Evaluation Metrics of the Unsupervised Models}
+	\label{fig:unsupervised_comparison}
+\end{figure*}
+
+\begin{figure*}[!t]
+	\centering
+	\includegraphics[width=\textwidth]{images/actual_vs_cluster_comparison.png}
+	\caption{PCA Visualization of Clusters for Each Unsupervised Model with Actual Class Labels as Hue}
+	\label{fig:unsupervised_pca_comparison}
+\end{figure*}
+
+\textit{\textbf{3. Calinski-Harabasz Score:}}
+
+Measures the ratio of between-cluster variance to within-cluster variance. A higher Calinski-Harabasz score indicates better clustering. Mathematically,
+\begin{equation}
+	\mathit{CH} = \frac{\text{Tr}(B_k)}{\text{Tr}(W_k)} \times \frac{n - k}{k - 1}
+\end{equation}
+
+\textit{Where:\\
+	$B_k$ : the between-cluster dispersion matrix.\\
+	$W_k$ : the within-cluster dispersion matrix.\\
+	$n$ : the total number of instances.\\
+	$k$ : the number of clusters.
+}
+
+\textit{\textbf{4. Adjusted Rand Index (ARI):}}
+
+Measures the similarity between the true class labels and the cluster assignments, adjusted for chance. A higher ARI indicates better clustering. Mathematically,
+\begin{equation}
+	\mathit{ARI} = \frac{\text{RI} - \text{Expected RI}}{\max(\text{RI}) - \text{Expected RI}}
+\end{equation}
+
+\textit{Where:\\
+	$\text{RI}$ : the Rand Index, which measures the agreement between two clusterings.\\
+	$\text{Expected RI}$ : the expected value of the Rand Index under random labeling.
+}
+
+\textit{\textbf{5. Normalized Mutual Information (NMI):}}
+
+Measures the mutual information between the true class labels and the cluster assignments, normalized to account for chance
+and the number of clusters. A higher NMI indicates better clustering. Mathematically,
+\begin{equation}
+	\mathit{NMI} = \frac{I(X; Y)}{\sqrt{H(X) H(Y)}}
+\end{equation}
+
+\textit{Where:\\
+	$I(X; Y)$ : the mutual information between the true labels $X$ and the cluster assignments $Y$.\\
+	$H(X)$ : the entropy of the true labels.\\
+	$H(Y)$ : the entropy of the cluster assignments.
+}
+
+The evaluation results of the unsupervised models are tabulated below:
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Clustering evaluation metrics for the unsupervised models.}
+\label{tab:unsupervised_metrics}
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}Xccc}
+\toprule
+Metric & K-Means & Hierarchical & Gaussian Mixture \\
+\midrule
+Silhouette Score & 0.221910 & 0.222706 & 0.216481 \\
+Davies-Bouldin Score & 1.378506 & 1.515881 & 2.598974 \\
+Calinski-Harabasz Score & 157.718387 & 144.809497 & 122.731468 \\
+Adjusted Rand Index & 0.587506 & 0.512008 & 0.417449 \\
+Normalized Mutual Information & 0.447570 & 0.412447 & 0.370465 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+We can see from the evaluation metrics tabulated in Table \ref{tab:unsupervised_metrics} that the K-Means model performed the best among the three unsupervised models, with the highest silhouette score, lowest Davies-Bouldin score, highest Calinski-Harabasz score, and highest ARI and NMI scores.
+
+The Agglomerative Clustering model performed slightly worse than K-Means, while the Gaussian Mixture Model performed the worst among the three, which is consistent with the PCA visualization and the nature of the data.
+
+As Gaussian Mixture Models assume that the data is generated from a mixture of Gaussian distributions, which may not be the case for this dataset, leading to poorer performance compared to K-Means and Agglomerative Clustering.
+K-means performed best because it is a simple and effective clustering algorithm that works well in general clustering scenarios.
+
+\section{Result Analysis and Conclusion}
+
+\subsection{Result Analysis}
+
+The results of the supervised models indicate that the Random Forest and XGBoost classifiers performed exceptionally well in predicting diabetes classes, with high precision, recall, and F1-scores across all classes.
+
+The SVM classifier, on the other hand, struggled with the pre-diabetic class (P) due to the non-linear relationships and class imbalance in the data, which is consistent with our understanding
+of the data and the nature of the models. 
+
+The ROC-AUC scores for all three models were very high, indicating that they are performing well in distinguishing between the classes.
+
+The results of the unsupervised models indicate that the K-Means clustering algorithm performed the best among the three unsupervised models, with the highest silhouette score, lowest Davies-Bouldin score, highest Calinski-Harabasz score, and highest ARI and NMI scores.
+
+The Agglomerative Clustering model performed slightly worse than K-Means, while the Gaussian Mixture Model performed the worst among the three, which is consistent with the PCA visualization and the nature of
+the data. 
+The Gaussian Mixture Model's assumption of data being generated from a mixture of Gaussian distributions may not hold for this dataset, leading to poorer performance compared to K-Means and Agglomerative Clustering.
+
+Overall, the results of this project demonstrate the importance of choosing appropriate models and evaluation metrics based on the characteristics of the data and the problem at hand.
+
+\subsection{Conclusion}
+In conclusion, this project provided a comprehensive analysis of the diabetes dataset using both supervised and unsupervised machine learning techniques.
+The supervised models, particularly Random Forest and XGBoost, performed exceptionally well in predicting diabetes classes, while the SVM model struggled with the pre-diabetic class due to the non-linear relationships and
+class imbalance in the data. The unsupervised models revealed some underlying structure in the data, with K-Means performing the best among the three clustering algorithms.
+The project also highlighted the importance of thorough exploratory data analysis, proper data preprocessing, and careful model selection and evaluation to achieve good performance and meaningful insights from the data.
+Hence, the objectives of the project were successfully achieved, and the results provide valuable insights into the diabetes dataset and the effectiveness of different machine learning techniques for classification and clustering tasks.
+
+\section{Limitations and Future Enhancements}
+
+\subsection{Limitations}
+\begin{itemize}
+	\item The dataset used in this project is relatively small, which may limit the generalizability of the results and the performance of the models.
+	\item The class imbalance in the dataset may have affected the performance of the models, particularly the SVM classifier, which struggled with the pre-diabetic class.
+	\item The unsupervised models may not have captured the true underlying structure
+	\item Clustering is inherently subjective and may not perfectly align with the true class labels, which can affect the interpretation of the clusters.
+	\item Selecting optimal cluster parameters (e.g., number of clusters) can be challenging and may require more sophisticated techniques than the elbow method.
+	\item Comparing the performance of supervised and unsupervised models can be difficult since they are designed for different tasks and may not be directly comparable.
+\end{itemize}
+
+\subsection{Future Enhancements}
+\begin{itemize}
+	\item Hyperparameter tuning and optimization for the supervised models to further improve their performance.
+	\item Exploring additional supervised models such as neural networks or ensemble methods to see if they can capture the complex relationships in the data better than the current models.
+	\item Handling class imbalance using techniques such as SMOTE (Synthetic Minority Over-sampling Technique) or class weighting to improve the performance of models on the minority classes.
+	\item Additional feature engineering and selection techniques to identify the most relevant features for classification and clustering.
+	\item Lipid profile ratios with the help of an expert could be engineered as additional features to capture more complex relationships in the data.
+\end{itemize}
+
+\newpage
+
+\section{Appendix}
+
+\subsection{Project Directory Structure}
+
+\begin{verbatim}
+project/
+|
+|-- classificationBook.ipynb
+|-- clusteringBook.ipynb
+|-- dataPrep.ipynb
+|-- edaBook.ipynb
+|-- evalClassModel.ipynb
+|-- evalClusteringModel.ipynb
+|
+|-- dataset/
+|-- images/
+|-- models/
+|-- processed_arrays/
+|
+`-- requirements.txt
+\end{verbatim}
+
+\subsection{Technologies Used}
+
+The following tools and libraries were used in this project:
+
+\textbf{Tools:}
+\begin{itemize}
+	\item Git (version control)
+	\item PyCharm (IDE)
+	\item Miniconda (environment and package management)
+\end{itemize}
+
+\textbf{Python Libraries:}
+\begin{itemize}
+	\item \texttt{pandas}
+	\item \texttt{numpy}
+	\item \texttt{matplotlib}
+	\item \texttt{seaborn}
+	\item \texttt{scikit-learn}
+	\item \texttt{xgboost}
+	\item \texttt{lightgbm}
+	\item \texttt{catboost}
+	\item \texttt{plotly}
+	\item \texttt{ipywidgets}
+	\item \texttt{sweetviz}
+	\item \texttt{notebook}
+	\item \texttt{jupyterlab}
+	\item \texttt{ipykernel}
+	\item \texttt{setuptools==68.2.2}
+	\item \texttt{torch}
+	\item \texttt{torchvision}
+	\item \texttt{torchaudio}
+	\item \texttt{cupy-cuda12x}
+	\item \texttt{joblib}
+\end{itemize}
+
+
+
+%%%%%%%%%%%%%%   Bibliography   %%%%%%%%%%%%%%
+
+\end{document}
