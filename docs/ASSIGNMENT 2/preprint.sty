@@ -148,6 +148,30 @@
                 { 0.5ex \@plus  0.2ex}%
                 {\normalsize\itshape\raggedright}%
 }
+% underline section titles (text only, not a full rule)
+\def\preprint@sectionname{section}
+\def\preprint@subsectionname{subsection}
+\def\preprint@subsubsectionname{subsubsection}
+\def\preprint@maybe@underline#1#2{%
+  \def\preprint@tmp{#1}%
+  \ifx\preprint@tmp\preprint@sectionname
+    \underline{#2}%
+  \else\ifx\preprint@tmp\preprint@subsectionname
+    \underline{#2}%
+  \else\ifx\preprint@tmp\preprint@subsubsectionname
+    \underline{#2}%
+  \else
+    #2%
+  \fi\fi\fi
+}
+\let\preprint@orig@sect\@sect
+\def\@sect#1#2#3#4#5#6[#7]#8{%
+  \preprint@orig@sect{#1}{#2}{#3}{#4}{#5}{#6}[#7]{\preprint@maybe@underline{#1}{#8}}%
+}
+\let\preprint@orig@ssect\@ssect
+\def\@ssect#1#2#3#4#5{%
+  \preprint@orig@ssect{#1}{#2}{#3}{#4}{\underline{#5}}%
+}
 \providecommand{\paragraph}{}
 \renewcommand{\paragraph}{%
   \@startsection{paragraph}{4}{\z@}%

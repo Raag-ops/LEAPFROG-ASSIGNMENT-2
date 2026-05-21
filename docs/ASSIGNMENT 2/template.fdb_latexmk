@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1779357229.48143 "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" "template.pdf" "template" 1779357231.74159 0
-  "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" 1779357228 37069 22590eea0e9401533ecd783ee9b9beba ""
+["pdflatex"] 1779359617.18215 "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" "template.pdf" "template" 1779359620.2162 0
+  "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" 1779359616 42566 24df92a5c0936bcb4c2187c4b6fc98e2 ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1766324908 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1766323332 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1766326541 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -221,11 +221,12 @@
   "images/dataset_dist.png" 1779197302 48129 6c6af1418f1927fc50d6aeb18c9efe74 ""
   "images/description_lenth.png" 1779340408 20206 fd558cd153845294041563a44e391652 ""
   "images/raw_description.png" 1779340389 22458 f380137ee2d684fe0635626d81e88295 ""
+  "images/systemarchi.png" 1779359604 941863 db2e33b2a627802c6aa1708a4e5483d1 ""
   "images/top_companies.png" 1779197320 43813 f30f7e08f0eb3498e72b35917de79c40 ""
-  "preprint.sty" 1774842398 9254 ce22bd621858c9bf39f6ee330017d3f1 ""
-  "template.aux" 1779357231 5690 c39a1627d89c63e22460264a0e656c48 "pdflatex"
-  "template.out" 1779357231 1728 6932de5470deead4b3e990fca8783391 "pdflatex"
-  "template.tex" 1779357228 37069 22590eea0e9401533ecd783ee9b9beba ""
+  "preprint.sty" 1779358935 9989 1e732aaa1984869e4e64c8a9f0986766 ""
+  "template.aux" 1779359619 8048 7a57e70521191b391a94b135e711e241 "pdflatex"
+  "template.out" 1779359619 3865 979d354bfb1da79fb7a67716f0794f62 "pdflatex"
+  "template.tex" 1779359616 42566 24df92a5c0936bcb4c2187c4b6fc98e2 ""
   (generated)
   "template.aux"
   "template.log"

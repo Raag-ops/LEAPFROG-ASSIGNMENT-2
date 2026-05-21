@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.2)  21 MAY 2026 15:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.2)  21 MAY 2026 16:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -940,7 +940,7 @@ LaTeX Font Info:    Trying to load font information for U+txsyc on input line 20
  (c:/texlive/2025/texmf-dist/tex/latex/txfonts/utxsyc.fd
 File: utxsyc.fd 2000/12/15 v3.1
 )
-<images/ProcessFlow.png, id=51, 922.44624pt x 1025.8325pt>
+<images/ProcessFlow.png, id=107, 922.44624pt x 1025.8325pt>
 File: images/ProcessFlow.png Graphic file (type png)
 <use images/ProcessFlow.png>
 Package pdftex.def Info: images/ProcessFlow.png  used on input line 210.
@@ -963,12 +963,12 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
 [2 <./images/ProcessFlow.png>]
-<images/dataset_dist.png, id=79, 1300.86pt x 361.35pt>
+<images/dataset_dist.png, id=135, 1300.86pt x 361.35pt>
 File: images/dataset_dist.png Graphic file (type png)
 <use images/dataset_dist.png>
 Package pdftex.def Info: images/dataset_dist.png  used on input line 259.
 (pdftex.def)             Requested size: 251.55872pt x 69.87575pt.
-<images/raw_description.png, id=81, 433.62pt x 289.08pt>
+<images/raw_description.png, id=137, 433.62pt x 289.08pt>
 File: images/raw_description.png Graphic file (type png)
 <use images/raw_description.png>
 Package pdftex.def Info: images/raw_description.png  used on input line 281.
@@ -989,22 +989,22 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 [3
 
  <./images/dataset_dist.png> <./images/raw_description.png>]
-<images/description_lenth.png, id=97, 434.3427pt x 289.08pt>
+<images/description_lenth.png, id=153, 434.3427pt x 289.08pt>
 File: images/description_lenth.png Graphic file (type png)
 <use images/description_lenth.png>
 Package pdftex.def Info: images/description_lenth.png  used on input line 291.
 (pdftex.def)             Requested size: 251.55872pt x 167.42831pt.
-<images/chunking_stats.png, id=99, 867.24pt x 289.08pt>
+<images/chunking_stats.png, id=155, 867.24pt x 289.08pt>
 File: images/chunking_stats.png Graphic file (type png)
 <use images/chunking_stats.png>
 Package pdftex.def Info: images/chunking_stats.png  used on input line 311.
 (pdftex.def)             Requested size: 251.55872pt x 83.8531pt.
-<images/top_companies.png, id=103, 867.24pt x 361.35pt>
+<images/top_companies.png, id=159, 867.24pt x 361.35pt>
 File: images/top_companies.png Graphic file (type png)
 <use images/top_companies.png>
 Package pdftex.def Info: images/top_companies.png  used on input line 332.
 (pdftex.def)             Requested size: 251.55872pt x 104.81638pt.
-<images/3Dvector_sace.png, id=104, 1001.99344pt x 635.37375pt>
+<images/3Dvector_sace.png, id=160, 1001.99344pt x 635.37375pt>
 File: images/3Dvector_sace.png Graphic file (type png)
 <use images/3Dvector_sace.png>
 Package pdftex.def Info: images/3Dvector_sace.png  used on input line 354.
@@ -1044,7 +1044,7 @@ Underfull \hbox (badness 1009) in paragraph at lines 396--397
 []\T1/txr/m/n/10 Provides an in-ter-face for in-ter-act-ing with the
  []
 
-<images/chromadb.jpg, id=124, 1027.84pt x 642.4pt>
+<images/chromadb.jpg, id=181, 1027.84pt x 642.4pt>
 File: images/chromadb.jpg Graphic file (type jpg)
 <use images/chromadb.jpg>
 Package pdftex.def Info: images/chromadb.jpg  used on input line 401.
@@ -1074,7 +1074,7 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
 [6 <./images/chromadb.jpg>]
-<images/crossencoder.png, id=134, 264.23718pt x 228.855pt>
+<images/crossencoder.png, id=191, 264.23718pt x 228.855pt>
 File: images/crossencoder.png Graphic file (type png)
 <use images/crossencoder.png>
 Package pdftex.def Info: images/crossencoder.png  used on input line 482.
@@ -1114,6 +1114,12 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
 [8]
+<images/systemarchi.png, id=241, 673.76718pt x 743.02594pt>
+File: images/systemarchi.png Graphic file (type png)
+<use images/systemarchi.png>
+Package pdftex.def Info: images/systemarchi.png  used on input line 693.
+(pdftex.def)             Requested size: 513.11743pt x 565.87337pt.
+
 
 Package fancyhdr Warning: \headheight is too small (10.84006pt): 
 (fancyhdr)                Make it at least 12.0pt, for example:
@@ -1126,7 +1132,53 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.60004pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.60004pt}.
 
-[9
+[9]
+
+Package fancyhdr Warning: \headheight is too small (10.84006pt): 
+(fancyhdr)                Make it at least 12.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.0pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.15994pt}.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[10 <./images/systemarchi.png>]
+
+Package fancyhdr Warning: \headheight is too small (10.84006pt): 
+(fancyhdr)                Make it at least 12.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.0pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.15994pt}.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[11
+
+]
+Underfull \hbox (badness 2698) in paragraph at lines 833--834
+[]\T1/cmtt/m/n/10 requirements-dev.txt \T1/txr/m/n/10 (de-vel-op-ment and note-
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (10.84006pt): 
+(fancyhdr)                Make it at least 12.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.0pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.15994pt}.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[12
+
 
 ]
 
@@ -1139,21 +1191,21 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `template.out' has not changed.
-(rerunfilecheck)             Checksum: 6932DE5470DEEAD4B3E990FCA8783391;1728.
+(rerunfilecheck)             Checksum: 979D354BFB1DA79FB7A67716F0794F62;3865.
  ) 
 Here is how much of TeX's memory you used:
- 26608 strings out of 467533
- 480108 string characters out of 5423669
- 886955 words of memory out of 5000000
- 54952 multiletter control sequences out of 15000+600000
+ 26667 strings out of 467533
+ 481195 string characters out of 5423669
+ 887473 words of memory out of 5000000
+ 54993 multiletter control sequences out of 15000+600000
  696917 words of font info for 133 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  132i,16n,135p,549b,1175s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxb.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxbi.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxbsc.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxsc.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfit1000.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/txex.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/txsy.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on template.pdf (9 pages, 611039 bytes).
+Output written on template.pdf (12 pages, 1412823 bytes).
 PDF statistics:
- 275 PDF objects out of 1000 (max. 8388607)
- 216 compressed objects within 3 object streams
- 81 named destinations out of 1000 (max. 500000)
- 146 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 350 PDF objects out of 1000 (max. 8388607)
+ 286 compressed objects within 3 object streams
+ 99 named destinations out of 1000 (max. 500000)
+ 263 words of extra memory for PDF output out of 10000 (max. 10000000)
 

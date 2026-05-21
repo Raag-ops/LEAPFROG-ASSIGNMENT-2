@@ -680,9 +680,157 @@ Avg similarity & 0.853220 & 0.874356 \\
 
 \subsubsection*{Generation Evaluation:}
 No quantitative evaluation metrics were implemented for the generation phase, as the evaluation of generated text can be subjective and often requires human judgment to assess the quality, relevance, and accuracy of the responses.
+
 And for a qualitative evaluation, an expert would be required to review the generated responses and assess their quality based on criteria such as relevance to the user query, accuracy of the information provided, coherence and fluency of the text, and whether the response appropriately cites the retrieved context.
 Hence, this evaluation was not performed due to the lack of resources and time constraints.
 
+\section{Sytem Architecture}
 
+A high level architecture diagram of the implemented RAG system is shown in Figure \ref{fig:system_architecture}.
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=\linewidth]{images/systemarchi.png}
+	\caption{High-Level Architecture of the RAG System}
+	\label{fig:system_architecture}
+\end{figure*}
+
+\FloatBarrier
+
+\section{Results, Analysis, and Conclusion}
+
+\subsection{Results and Analysis}
+
+The implemented RAG system was evaluated using a manually created pseudo benchmark of 60 user queries,and the retrieval performance was assessed using metrics such as Hit@K, MRR, Precision@K, TermOverlap@K, Latency, and Average Similarity.
+
+The results showed that the system achieved a Hit@K of 1.0 for both case types, indicating that at least one relevant chunk was retrieved for every query in the top K results.
+
+The MRR scores were 0.8625 for the "category\_location" case type and 0.9308 for the "exact\_job" case type, suggesting that relevant chunks were ranked highly in the retrieved results.
+
+The Precision@K was 0.345 for the "category\_location" case type and 0.270 for the "exact\_job" case type, indicating that a significant proportion of the retrieved chunks were relevant to the user queries.
+
+The TermOverlap@K was 0.985 for the "category\_location" case type and 0.860 for the "exact\_job" case type, suggesting that the retrieved chunks had a high degree of overlap with the query terms, which is a positive indicator of relevance.
+
+The latency metrics showed that the median retrieval time was around 290 ms for the "category\_location" case type and around 316 ms for the "exact\_job" case type, with the 95th percentile latency being around 352 ms and 358 ms respectively, indicating that the retrieval process is efficient and suitable for real-time applications.
+
+Overall, the retrieval performance of the RAG system was strong, with high relevance and efficient retrieval times.
+
+\subsection{Conclusion}
+Hence, I was successfully able to design, implement, and evaluate a Retrieval-Augmented Generation (RAG) system for job descriptions using a local setup with Hugging Face Transformers and ChromaDB. 
+The implemented system effectively retrieves relevant job description chunks based on user queries and generates concise, cited responses using a language model.
+
+\section{Limitations and Future Enhancements}
+
+\subsection{Security and Limitations}
+
+\subsubsection{Prompt Injection}
+Job descriptions may contain malicious instructions. Since retrieved text is inserted into the prompt, a job listing could attempt to override system rules. Mitigations:
+\begin{itemize}
+	\item Stronger system prompt separating evidence from instructions.
+	\item Prompt-injection detection.
+	\item Escaping or delimiting retrieved content.
+	\item Source trust validation.
+\end{itemize}
+
+\subsubsection{Data Leakage}
+If sensitive data exists in the CSV, retrieval could expose it. Mitigations:
+\begin{itemize}
+	\item Row-level access control.
+	\item Metadata filtering by user permissions.
+	\item Redaction during ingestion.
+	\item Audit logs.
+\end{itemize}
+
+\subsubsection{Hallucinations}
+The prompt reduces hallucination but cannot eliminate it. The system should validate answer claims against retrieved chunks for high-stakes use.
+
+\subsubsection{Retrieval Failures}
+Retrieval can fail when:
+\begin{itemize}
+	\item Query wording is too vague.
+	\item Chunks are poorly segmented.
+	\item Metadata is missing.
+	\item Embeddings miss exact identifiers.
+	\item Relevant information is spread across chunks.
+\end{itemize}
+
+
+\subsection{Future Improvements}
+Recommended improvements:
+\begin{itemize}
+	\item True BM25 sparse retrieval instead of simple keyword overlap.
+	\item Configurable LLM device separate from embedding device.
+	\item Streaming generation responses.
+	\item Conversational memory with source-aware history.
+	\item Token-aware chunking.
+	\item Semantic chunking.
+	\item Query rewriting.
+	\item Multi-query retrieval.
+	\item Stronger reranking model.
+	\item Hybrid vector database with sparse+dense indexes.
+	\item Real-time incremental indexing.
+	\item Prompt-injection filtering.
+	\item Answer faithfulness verifier.
+	\item Generated citations linked to source records.
+	\item Quality evaluation with human feedback loop.
+	\item Tuning embedding and generation models on domain-specific data.
+\end{itemize}
+
+\clearpage
+
+\newpage	
+
+\appendix
+\section{Appendix}
+
+\subsection{Directory Structure}
+\begin{verbatim}
+.
+|-- app/
+|   |-- main.py
+|   |-- api/
+|   |   |-- dependencies.py
+|   |   `-- routes.py
+|   |-- core/
+|   |   |-- config.py
+|   |   `-- logging.py
+|   |-- models/
+|   |   `-- schemas.py
+|   |-- rag/
+|   |   |-- pipeline.py
+|   |   |-- prompts.py
+|   |   |-- reranker.py
+|   |   `-- retriever.py
+|   |-- services/
+|   |   |-- embedding_service.py
+|   |   |-- llm_service.py
+|   |   `-- vector_store_service.py
+|   `-- utils/
+|       |-- chunker.py
+|       `-- preprocessor.py
+|-- data/
+|   |-- LFJobs.csv
+|   `-- chroma_db/
+|-- docs/
+|   |-- METHODOLOGY.md
+|   |-- *.png
+|   `-- ASSIGNMENT 2/
+|-- notebook/
+|   |-- edaBook.ipynb
+|   |-- evalRAG.ipynb
+|   `-- ingestion.ipynb
+|-- scripts/
+|   `-- ingest.py
+|-- requirements.txt
+|-- requirements-dev.txt
+`-- README.MD
+\end{verbatim}
+
+\subsection{Requirements}
+The project dependencies are captured in these files:
+\begin{itemize}
+	\item \texttt{requirements.txt} (runtime dependencies)
+	\item \texttt{requirements-dev.txt} (development and notebook dependencies)
+\end{itemize}
 
 \end{document}

@@ -471,6 +471,11 @@ INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txsyc.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txsyc.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txexa.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txexa.tfm
+INPUT ./images/systemarchi.png
+INPUT ./images/systemarchi.png
+INPUT ./images/systemarchi.png
+INPUT ./images/systemarchi.png
+INPUT ./images/systemarchi.png
 INPUT c:/texlive/2025/texmf-dist/fonts/vf/public/txfonts/t1xr.vf
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxptmr.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxr.tfm
