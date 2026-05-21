@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1779255105.98797 "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" "template.pdf" "template" 1779255107.96274 2
-  "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" 1779255102 36416 d125367e649174ef9377133978e8b3f0 ""
+["pdflatex"] 1779291969.88933 "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" "template.pdf" "template" 1779291973.80755 2
+  "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" 1779291967 37924 6209ccba671689e923f9e2a4660459b6 ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1766324908 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1766323332 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1766326541 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -222,7 +222,6 @@
   "images/hierarchical_clusters.png" 0 -1 0 ""
   "images/kmeans_clusters.png" 0 -1 0 ""
   "images/kmeans_elbow_curve.png" 0 -1 0 ""
-  "images/methodology.png" 0 -1 0 ""
   "images/model_comparison.png" 0 -1 0 ""
   "images/pairplot_cr_urea.png" 0 -1 0 ""
   "images/pca.png" 0 -1 0 ""
@@ -234,9 +233,9 @@
   "images/xgb_accuracy_curve.png" 0 -1 0 ""
   "images/xgb_feature_importance.png" 0 -1 0 ""
   "preprint.sty" 1774842398 9254 ce22bd621858c9bf39f6ee330017d3f1 ""
-  "template.aux" 1779255107 10739 82dbb9a0e30748343aaf63b6126a1a68 "pdflatex"
-  "template.out" 1779255107 2600 579e129f66505e65be516b49aadf6e19 "pdflatex"
-  "template.tex" 1779255102 36416 d125367e649174ef9377133978e8b3f0 ""
+  "template.aux" 1779291973 10647 276a0fd01542b71883b7375ca9f2a4f4 "pdflatex"
+  "template.out" 1779291973 2978 7ea82dd0145083bd745708e0196a1c32 "pdflatex"
+  "template.tex" 1779291967 37924 6209ccba671689e923f9e2a4660459b6 ""
   (generated)
   "template.aux"
   "template.log"

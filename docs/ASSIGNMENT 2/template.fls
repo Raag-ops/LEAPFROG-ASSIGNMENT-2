@@ -341,9 +341,6 @@ INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txsyc.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txsyc.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txexa.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txexa.tfm
-INPUT c:/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ectt1000.tfm
-INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/t1xr.tfm
-INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/t1xi.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/vf/public/txfonts/t1xsc.vf
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxptmr.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxsc.tfm
@@ -367,6 +364,9 @@ INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxi.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/vf/public/txfonts/t1xsc.vf
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxptmr.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxsc.tfm
+INPUT c:/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ectt1000.tfm
+INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/t1xr.tfm
+INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/t1xi.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/t1xsc.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/vf/public/txfonts/t1xsc.vf
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxsc.tfm
@@ -384,12 +384,12 @@ INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txsya.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txsyb.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txsyc.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/txexa.tfm
+INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/t1xb.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/vf/public/txfonts/txi.vf
 INPUT c:/texlive/2025/texmf-dist/fonts/vf/public/txfonts/txr.vf
 INPUT c:/texlive/2025/texmf-dist/fonts/vf/public/txfonts/t1xr.vf
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxptmr.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxr.tfm
-INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/t1xb.tfm
 INPUT c:/texlive/2025/texmf-dist/fonts/vf/public/txfonts/txr.vf
 INPUT c:/texlive/2025/texmf-dist/fonts/vf/public/txfonts/txmi.vf
 INPUT c:/texlive/2025/texmf-dist/fonts/tfm/public/txfonts/rtxmi.tfm

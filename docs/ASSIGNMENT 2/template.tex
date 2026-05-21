@@ -157,7 +157,7 @@
 }
 \end{abstract}
 
-\keywords{\textit{Supervised, Unsupervised, Random Forest, XGBoost, SVM, K-Means, Gaussian Mixture Model, Agglomerative Clustering, PCA, feature engineering}}
+\keywords{\textit{Retrieval-Augmented Generation, Vector Search, ChromaDB, Hugging Face Transformers, FastAPI, Pydantic, Reranker}}
 
 \vspace{0.5cm}
 
@@ -167,58 +167,63 @@
 
 \section{Introduction}
  
-\subsection{Background}
+\subsection{What is Retrieval-Augmented Generation (RAG)?}
 
-Diabetes is one of the most common chronic diseases worldwide and early detection is important for reducing complications and improving healthcare outcomes.
-Machine learning techniques can assist healthcare systems by identifying patterns in patient data and supporting predictive analysis.
+RAG or Retrieval-Augmented Generation is an architectural paradigm in natural language processing that combines information retrieval with text generation.
+A standalone language model answers from its learned internal parameters alone, which means that it relies on knowledge encoded dyring the training phase plus the 
+context provided by a user prompt during that time. This can lead to real practical issues, it can hallucinate information, fabricate plausibl souding details
+when its parametric memeory is insufficient. Standards language models are also incapable of fitting a large dataset into every prompt.
 
-This project focuses on:
-\begin{itemize}
-    \item Exploratory analysis of diabetes data
-    \item Data preprocessing and feature engineering
-    \item Supervised classification for diabetes prediction
-    \item Unsupervised clustering for patient segmentation
-    \item Model evaluation and comparison
-\end{itemize}
+A RAG system addressses these issues by retrieving relevant external context at query time and injecting the context into the model prompt.
+The model is then instructed to answer only from the retrieved context.
 
-The project follows a complete end-to-end machine learning workflow beginning with exploratory data analysis (EDA), followed by data cleaning, preprocessing, feature engineering, model training, evaluation, and visualization. 
-Different statistical and visual analysis techniques are applied throughout the workflow to better understand the dataset and interpret model performance.
+For the context of this project, the external knowledge base is a CSV of job listings provided by Leapfrog Technology Inc.
+The retrieval layer finds matching job description chunks, the generation layer uses those chunks to produce a job recommendation based on the user query.
 
-The project is implemented using Python and Jupyter notebooks with libraries such as Scikit-learn, XGBoost, Pandas, NumPy, Seaborn, Plotly, and Sweetviz.
-I aim to provide a comprehensive analysis of the diabetes dataset using both supervised and unsupervised machine learning techniques, 
-and to document my workflow and engineering decisions throughout the process. 
+\subsection{Purpose of the System}
+
+The job RAG Pipeline loads jobs from a CSV file, cleans and normalizes the HTML formatted job descriptions, converts them into searchable text chunks, embeds those chunks into vector representations,
+stores the vectors in a local ChromaDB vector database, and injects the language model with context at query time for a more grounded response.
  
 \subsection{Objectives}
 My objectives of this assignment are to:
 \begin{enumerate}
-    \item Perform exploratory data analysis on the provided diabetes dataset.
-    \item Prepare and preprocess the data for machine learning tasks.
-    \item Train multiple classification models to predict diabetes classes.
-    \item Apply clustering techniques to discover hidden structures in the dataset.
-    \item Evaluate classification and clustering models using standard metrics.
-    \item Visualize the results and provide insights.
-\end{enumerate}
+	\item Design and implement a RAG pipeline that can effectively retrieve relevant job descriptions based on user queries.
+	\item Evaluate the performance of the retrieval and generation components using appropriate metrics.
+	\item Document the entire process, including the methodology, results, and insights gained from the project.
+	\item Optionally try to implement a reranker model to further improve the retrieval performance of the system.
+	\item Identify limitations of the current system and propose potential improvements for future iterations.
 
 \section{Methodology}
-The provided data source is a CSV of clinical diabetes records. Each row consists of a patient with the target column, CLASS, which takes three values: N (non-diabetic), P (pre-diabetic), and Y (diabetic).
-Features of the records consists of demographic information (AGE, Gender) and clinical measures capturing BMI and lipid profiles in addition to other physiological indicators.
-The methodology of this project is structured into two main parts: 4 main phases. They are as follows:
+The provided dataset LFJobs.csv consists of 1,000 job listings with the following columns:
 \begin{itemize}
-	\item EDA and Data Preprocessing
-	\item Model Building Phase
-	\item Model Evaluation Phase
-	\item Documentation and Interpretation Phase
+	\item \textbf{ID:} A unique identifier for each job listing.
+	\item \textbf{Job Category:} The category or field of the job.
+	\item \textbf{Job Title:} The title of the job position.
+	\item \textbf{Company Name:} The name of the company offering the job.
+	\item \textbf{Publication Date:} The date when the job listing was published.
+	\item \textbf{Job Location:} The location where the job is based.
+	\item \textbf{Job Level:} The seniority level of the job (e.g., entry-level, mid-level, senior).
+	\item \textbf{Tags:} Keywords or tags associated with the job listing.
+	\item \textbf{Job Description:} A detailed description of the job responsibilities, requirements, and other relevant information.
 \end{itemize}
 
-The entire methodology is shown in the process flow diagram below:
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/methodology.png}
-	\caption{Process Flow Diagram of the Methodology}
-	\label{fig:process_flow}
-\end{figure}
+The "Job Description" column contains HTML formatted text, which requires cleaning and normalization before it can be used for retrieval and generation.
+Normalization involves removing HTML tags, special characters, and extra whitespace, as well as converting the text to lowercase for consistency.
 
-\subsection{EDA and Data Preprocessing}
+The entire methodology of the project can be broadly categorized into 5 main phases:
+\begin{enumerate}
+	\item \textbf{EDA and Data Ingestion:} Cleaning data, building documents, chunking, embedding, and storing to ChromaDB.
+	\item \textbf{Retrieval:} Using a hybrid retriever to find relevant job description chunks based on user queries, combine the results using reciprocal rank fusion.
+	\item \textbf{Reranking:} Reranking the retrieved chunks using a cross-encoder to improve the relevance of the context provided to the language model.
+	\item \textbf{Generation:} Constructing prompts for the LLM as a wrapper around the retrieved context and generating responses to user queries.
+	\item \textbf{Serving:} Building a FastAPI application to serve the RAG system and handle user queries in real-time.
+	\item \textbf{Output and Evaluation:} Evaluating the performance of the retrieval and generation components using appropriate metrics and documenting the results.
+\end{enumerate}
+
+The above methodology is depicted in the process flowchart below:
+
+\subsection{EDA and Data Ingestion Phase}
 \subsubsection*{Exploratory Data Analysis:}
 
 EDA (Exploratory Data Analysis) refers to the initial phase of data analysis where we explore the dataset to understand its structure, identify patterns, and detect anomalies.
