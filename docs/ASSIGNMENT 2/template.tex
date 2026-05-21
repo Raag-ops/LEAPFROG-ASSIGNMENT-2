@@ -348,6 +348,16 @@ Hence, implementing a hybrid retriever that combines dense and sparse retrieval 
 
 Also metadata filtering and diversification strategies can be implemented in the future to further address these biases.
 
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=\linewidth]{images/3Dvector_sace.png}
+	\caption{3D Visualization of the Embedding Space}
+	\label{fig:embedding_space}
+\end{figure*}
+
+\FloatBarrier
+
 \subsubsection*{Embedding the Chunks}
 
 Embedding refers the process of converting text into dense vector representations that capture the semantic meaning of the text on a continuous vector space.
@@ -414,4 +424,181 @@ ChromaDB was picked over other vector databases like FAISS or other vector store
 It is simple to setup and run locally, persistant without external dependencies, python native and sutiable for both notebook and script usages.
 
 It also provides a higher level document store abstraction with metadata support, which is useful for our use case.
+
+\subsection{Retrieval Phase}
+
+Retrieval refers to the process of finding relevant job description chunks from the vector store based on a user query.
+There are many different retrieval startegies that can be implemented in a RAG system, each with its own advantages and disadvantages.
+
+As we explored and analysed during the phase, implementing a hybrid retriever that combines dense vector search and sparse keyword search to improve the relevance of the retrieved results.
+
+This is becase the dataset was found to be heavily skewed towards certain categories, levels, and companies, which could introduce bias in the retrieval results if only one retrieval method was used.
+The search results from both methods are then combined using Reciprocal Rank Fusion (RRF) to create a more robust and comprehensive set of candidate chunks for the generation phase.
+
+Before retrieval, the user query is also embedded using the same BAAI/bge-small-en-v1.5 model to ensure that the query and the job description chunks are represented in the same vector space for effective similarity comparison.
+
+\subsubsection*{Hybrid Retrieval:}
+
+Hybrid retrieval is a type of ensemble retrieval method that untilizes a dense search for vectors and a sparse search for keywords.
+It combines the strengths of both dense vector search and sparse keyword search to improve the relevance of the retrieved results.
+
+\begin{description}
+	\item[Dense Vector Search:] The vector store is then queried to find the most similar chunks based on cosine similarity between the query vector and the chunk vectors. This method captures semantic similarity and can retrieve relevant chunks even if they do not contain the exact keywords from the query. 
+	\item[Sparse Keyword Search:] A traditional keyword based search is performed on the job description text to find chunks that contain the exact keywords from the user query. This method can capture specific terms and phrases that may be important for relevance, especially in cases where the query contains specific job titles, skills, or other keywords.
+\end{description}
+
+The results from both retrieval methods are then combined using Reciprocal Rank Fusion (RRF), which is a technique for combining ranked lists of results from different retrieval methods.
+The RRF score for a given chunk is calculated as follows:
+\begin{equation}
+\text{RRF Score} = \sum_{i=1}^{N} \frac{1}{k_i + 1}
+\end{equation}
+\textit{Where: \\}
+\begin{itemize}
+	\item $N$ is the number of retrieval methods (in this case, 2: dense and sparse)
+	\item $k_i$ is the rank of the chunk in the results from the $i$-th retrieval method (starting from 0 for the top-ranked result)
+\end{itemize}
+The RRF score gives more weight to chunks that are ranked higher in either retrieval method, allowing for a more balanced combination of results.
+Top K chunks based on the RRF scores are then selected as candidate chunks for the next phase of reranking and generation.
+
+But, for the reranker, \textbf{K + 1} chunks are selected to ensure enough candidates are available for reranking.
+
+In this way, the biased generation from the dataset can be mitigated by ensuring relevant chunks are fetched.
+
+\subsubsection{Reranking Phase:}
+
+Reranking refers to the process of taking the candidate chunks retrieved from the previous phase and reordering them based on their relevance to the user query.
+This is typically done using a more computationally expensive model, such as a cross-encoder, that can capture finer, more granular semantic relationships between the query and the chunks.
+
+\subsubsection*{Cross-Encoder:}
+
+A cross-encoder is a type of neural network architecture that takes two inputs (in this case, the user query and a candidate chunk) and processes them together to produce a relevance score.
+Unlike bi-encoders, which encode the query and the chunks separately, cross-encoders allow for interactions between the query and the chunk during the encoding process, which can lead to more accurate relevance scoring.
+
+The cross-encoder architecture typically consists of a transformer based model that takes the concatenated query and chunk as input and produces a single output score that indicates the relevance of the chunk to the query.
+The figure \ref{fig:cross_encoder} illustrates the architecture of a cross-encoder.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{images/crossencoder.png}
+	\caption{Architecture of a Cross-Encoder \\ \textbf{Source: https://www.semanticscholar.org/paper/Cross-Encoding-as-Augmentation}}
+	\label{fig:cross_encoder}
+\end{figure}
+
+The top K ranked passages after rerankin are then selected as the final context to be injected into the language model for generation.
+These passages are concatenated together with appropriate separators to form the context section of the prompt, ensuring that the most relevant information is provided to the model for generating a response to the user query.
+
+\subsection{Generation Phase:}
+
+This phase of the pipeline is responsible for taking the retrieved and reranked chunks of job descriptions as input and using them as context to generate a response to the user query.
+
+It utilizes a language model to produce a concise, cited answer based on the provided context and the user query.
+
+For this implementation, I used the Qwen2.5-3B-Instruct model from Hugging Face Transformers, which is a powerful language model designed for instruction following tasks.
+It is an open source, 2.5 billion parameter model that is optimized for generating high-quality responses based on provided instructions and context.
+
+Hugging Face Transformers is a popular library for natural language processing that provides a wide range of pre-trained models and tools for working with them.
+
+\subsubsection*{Prompt Design and Engineering:}
+
+Prompt design is a critical aspect of the generation phase, as it determines how the retrieved context and user query are presented to the language model to elicit the desired response.
+For this system, a system prompt was designed to instruct the model to answer only based on the retrieved context and to cite the relevant chunks in the response.
+The system prompt is structured as follows:
+\begin{verbatim}
+- answer as a precise job search assistant
+- use only provided job listings
+- do not invent companies or requirements
+- say when context is insufficient
+- be concise and structured
+- include title, company, location, and level
+- cite source numbers
+\end{verbatim}
+
+This prompt is designed for hallucination mitigation and consistent output structure.
+These prompting decisions were refereced from big LLMs like ChatGPT and Claude, which have similar system prompts for grounded generation.
+
+The retrieved and reranked chunks are then formatted and injected into the prompt as context, with clear separators between chunks to help the model distinguish between different pieces of information.
+The user query is also included in the prompt to provide the model with the specific question it needs to answer based on the provided context.
+The final prompt is then passed to the Qwen2.5-3B-Instruct model for generation.
+
+\subsection{Serving Phase:}
+
+Now that the retrieval and generation components are implemented, 
+the next step is to serve the RAG system so that it can handle user queries in real-time.
+For this purpose, a FastAPI endpoint was built that provides an API endpoint for receiving user queries and returning generated responses.
+
+FastAPI is a modern, python native web framework that is designed for building APIs quickly and efficiently.
+It is a restful framework that provides features such as automatic request validation, serialization, and documentation generation, making it an ideal choice for serving the RAG system.
+
+Pydantic is a data validation library that is used in conjunction with FastAPI to define the expected structure of the request and response data.
+It is the automatic request validation provided by FastAPI and Pydantic ensures that the incoming user queries are properly structured and contain the necessary information for processing, which helps to prevent errors and improve the robustness of the API.
+
+Langchain is a framework for building language model applications that provides tools and abstractions for working with language models, including prompt management, chaining of operations, and integration with various LLMs.
+
+Using these libraries, the RAG system is served through a FastAPI application that listens for incoming POST requests at the `/api/query` endpoint.
+When a user sends a query to this endpoint, the API processes the request, performs retrieval and generation using the RAG pipeline, and returns the generated response in a structured JSON format.
+
+The entire service Query-to-Response flow is as follows:
+\begin{enumerate}
+ \item User sends JSON to \texttt{POST /api/query}.
+ \item FastAPI parses the body.
+ \item Pydantic validates query, \texttt{top\_k}, and filters.
+ \item API checks \texttt{vector\_store.is\_ready}.
+ \item API logs query metadata.
+ \item \texttt{RAGPipeline.run} starts a timer.
+ \item Pipeline computes candidate fetch count.
+ \item \texttt{HybridRetriever.retrieve} embeds the query.
+ \item ChromaDB returns dense nearest neighbors.
+ \item Keyword retrieval may return sparse matches.
+ \item RRF may fuse dense and keyword results.
+ \item Reranker may rescore candidates.
+ \item \texttt{format\_context} creates numbered evidence.
+ \item \texttt{build\_answer\_prompt} creates user prompt.
+ \item \texttt{LLMService.generate} invokes Hugging Face pipeline.
+ \item Pipeline catches LLM failures and falls back to a retrieval-only message if needed.
+ \item Raw candidates are converted to \texttt{JobChunk}.
+ \item Sources are deduplicated by job ID.
+ \item Retrieval metadata is assembled.
+ \item \texttt{QueryResponse} is returned to FastAPI.
+ \item FastAPI serializes the response as JSON.
+\end{enumerate}
+
+The FastAPI also provides the Swagger UI for interactive testing and usage of the API, without the need for a dedicated 
+frontend client. 
+
+CORS (Cross Origin Resource Sharing) is a protocol that allows web applications running on one domain to make requests to resources on a different domain.
+The CORS for this locally served API is configured permissively to allow requests from any origin.
+
+\subsubsection*{\texttt{POST /api/query}}
+Input: \texttt{QueryRequest}.
+
+Output: \texttt{QueryResponse}.
+
+Internal logic:
+\begin{enumerate}
+ \item Check vector store readiness.
+ \item Log query details.
+ \item Run RAG pipeline.
+ \item Convert pipeline failures into \texttt{HTTP 500}.
+ \item Return structured response.
+\end{enumerate}
+
+\subsubsection*{\texttt{GET /api/health}}
+Input: none.
+
+Output: \texttt{HealthResponse}.
+
+Internal logic:
+\begin{enumerate}
+ \item Report service status.
+ \item Report application version.
+ \item Report vector store readiness.
+ \item Report embedding model.
+ \item Report effective LLM provider and model.
+\end{enumerate}
+
+
+Some quality of life features were also implemented as such as logging, error handling, and response formatting to improve the usability and maintainability of the API.
+
+
+
 \end{document}
