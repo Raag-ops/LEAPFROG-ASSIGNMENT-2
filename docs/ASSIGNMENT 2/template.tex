@@ -600,5 +600,89 @@ Internal logic:
 Some quality of life features were also implemented as such as logging, error handling, and response formatting to improve the usability and maintainability of the API.
 
 
+\subsection{Evaluation and Analysis}
+
+The implemented RAG system was evaluated using a combination of quantitative metrics.
+Different components of the system were evaluated separately to understand their individual performance, as well as the overall performance of the end-to-end pipeline.
+
+No evaluation label was provided for this assignment, 
+so the evaluation was based on a manually created pseudo benchmark of 60 user queries that were designed to cover a range of scenarios and query types relevant to job search.
+
+\subsubsection*{Retrieval Evaluation:}
+The retrieval performance was evaluated using the below given metrics:
+
+\textbf{\textit{Precision@K}:}\\
+Refers to the precision of the retrieved results at a specific rank K. It measures the proportion of relevant chunks among the top K retrieved chunks. Mathematically,
+\begin{equation}
+\text{Precision@K} = \frac{\text{Number of Relevant Chunks in Top K}}{K}
+\end{equation}
+
+\textbf{\textit{Hit@K}:}\\
+Indicates whether at least one relevant chunk appears in the top K results for a query.
+\begin{equation}
+\text{Hit@K} = 
+\begin{cases}
+1, & \text{If A Relevant Chunk Is Found In Top K} \\
+0, & \text{otherwise,}
+\end{cases}
+\end{equation}
+
+\textbf{\textit{MRR (Mean Reciprocal Rank)}:}\\
+Measures how early the first relevant chunk appears in the ranked list, averaged over all queries.
+\begin{equation}
+\text{MRR} = \frac{1}{N} \sum_{i=1}^{N} \frac{1}{\text{rank}_i}
+\end{equation}
+
+\textbf{\textit{TermOverlap@K}:}\\
+Captures average query term overlap with the top K retrieved chunks.
+\begin{equation}
+\text{TermOverlap@K} = \frac{1}{K} \sum_{j=1}^{K} \frac{|Q \cap C_j|}{|Q|}
+\end{equation}
+
+\textbf{\textit{Latency (Median, P95)}:}\\
+Summarizes retrieval latency across requests using the median and 95th percentile.
+\begin{equation}
+\text{Latency}_{50} = P_{50}(\{t_i\}), \quad \text{Latency}_{95} = P_{95}(\{t_i\})
+\end{equation}
+
+\textbf{\textit{Average Similarity}:}\\
+Reports the mean similarity score of the top K retrieved chunks.
+\begin{equation}
+\text{AvgSim@K} = \frac{1}{K} \sum_{j=1}^{K} s_j
+\end{equation}
+
+The retrieval evaluation was performed on a sample of 60 queries, with 20 queries for the "category\_location" case type and 40 queries for the "exact\_job" case type.
+The results of the retrieval evaluation are summarized in Table \ref{tab:retrieval_metrics}
+
+\begin{table}[h]
+\centering
+\caption{Retrieval metrics by case type}
+\label{tab:retrieval_metrics}
+\small
+\setlength{\tabcolsep}{7pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}X r r@{}}
+\toprule
+Metric & category\_location & exact\_job \\
+\midrule
+Cases & 20 & 40 \\
+Hit@K & 1.0000 & 1.0000 \\
+MRR & 0.862500 & 0.930833 \\
+Precision@K & 0.345 & 0.270 \\
+TermOverlap@K & 0.985 & 0.860 \\
+\shortstack{Latency\\median (ms)} & 289.43855 & 315.83165 \\
+\shortstack{Latency\\p95 (ms)} & 351.550985 & 358.333340 \\
+Avg similarity & 0.853220 & 0.874356 \\
+\bottomrule
+\end{tabularx}
+\renewcommand{\arraystretch}{1.25}
+\end{table}
+
+\subsubsection*{Generation Evaluation:}
+No quantitative evaluation metrics were implemented for the generation phase, as the evaluation of generated text can be subjective and often requires human judgment to assess the quality, relevance, and accuracy of the responses.
+And for a qualitative evaluation, an expert would be required to review the generated responses and assess their quality based on criteria such as relevance to the user query, accuracy of the information provided, coherence and fluency of the text, and whether the response appropriately cites the retrieved context.
+Hence, this evaluation was not performed due to the lack of resources and time constraints.
+
+
 
 \end{document}

@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1779356125.09907 "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" "template.pdf" "template" 1779356127.1885 0
-  "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" 1779356124 33354 3b6ad8e568288bd8f76d904772dd6481 ""
+["pdflatex"] 1779357229.48143 "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" "template.pdf" "template" 1779357231.74159 0
+  "c:/Users/mahar/PycharmProjects/PythonProject1/docs/ASSIGNMENT 2/template.tex" 1779357228 37069 22590eea0e9401533ecd783ee9b9beba ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1766324908 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1766323332 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1766326541 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -38,6 +38,7 @@
   "c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxb.pfb" 1766359555 6330 bdd610a36762742dd8a518bf9f97b968 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxbi.pfb" 1766359555 6767 7618c823c22960da3ea8584d0422a789 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxbsc.pfb" 1766359555 11557 c84f8a007764c604d3891eb707a5dc9f ""
+  "c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb" 1766359555 13806 49b888f4605a088e66b9eb4fee320a6e ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb" 1766359555 6339 e2b78706efdc360ee6aec9b6e20211a7 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/rtxsc.pfb" 1766359555 11099 83316203930a07cc1ec0d29d0f0dd35c ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/txfonts/txex.pfb" 1766359555 17531 c91f2d6943f51d7c46d6b7b9cedd50ba ""
@@ -222,9 +223,9 @@
   "images/raw_description.png" 1779340389 22458 f380137ee2d684fe0635626d81e88295 ""
   "images/top_companies.png" 1779197320 43813 f30f7e08f0eb3498e72b35917de79c40 ""
   "preprint.sty" 1774842398 9254 ce22bd621858c9bf39f6ee330017d3f1 ""
-  "template.aux" 1779356126 5206 edba4b9a8a7b3b471f27249dbd4fcc19 "pdflatex"
-  "template.out" 1779356126 1549 a1792217471306375c9d070619e29d13 "pdflatex"
-  "template.tex" 1779356124 33354 3b6ad8e568288bd8f76d904772dd6481 ""
+  "template.aux" 1779357231 5690 c39a1627d89c63e22460264a0e656c48 "pdflatex"
+  "template.out" 1779357231 1728 6932de5470deead4b3e990fca8783391 "pdflatex"
+  "template.tex" 1779357228 37069 22590eea0e9401533ecd783ee9b9beba ""
   (generated)
   "template.aux"
   "template.log"
