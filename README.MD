@@ -1,7 +1,5 @@
 # Job RAG Pipeline
 
-Production-style Retrieval-Augmented Generation (RAG) system for querying job listings with semantic search and grounded LLM answers.
-
 The project ingests job listings from `data/LFJobs.csv`, cleans the HTML job descriptions, chunks the text, embeds chunks with a SentenceTransformer model, stores vectors in ChromaDB, retrieves relevant chunks for a user query, optionally reranks them, and generates an answer with a local Hugging Face LLM.
 
 ## What This Project Does
