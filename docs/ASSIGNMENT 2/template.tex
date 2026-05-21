@@ -162,7 +162,6 @@
 \vspace{0.5cm}
 
 \end{@twocolumnfalse}]
-
 %%%%%%%%%%%%%%%  Main text   %%%%%%%%%%%%%%%
 
 \section{Introduction}
@@ -193,13 +192,29 @@ My objectives of this assignment are to:
 	\item Document the entire process, including the methodology, results, and insights gained from the project.
 	\item Optionally try to implement a reranker model to further improve the retrieval performance of the system.
 	\item Identify limitations of the current system and propose potential improvements for future iterations.
-
+\end{enumerate}
 \section{Methodology}
+This section outlines the methodology I followed to design, implement, and evaluate the RAG system for job descriptions. The process can be broadly categorized into several phases, starting with data exploration and ingestion, followed by retrieval, reranking, generation, and finally serving the application (client).
+
+Before diving into the details of each phase, it is important to understand the structure of the dataset and the challenges it presents.
 The provided dataset LFJobs.csv consists of 1,000 job listings with the following columns:
 \begin{itemize}
 	\item \textbf{ID:} A unique identifier for each job listing.
 	\item \textbf{Job Category:} The category or field of the job.
 	\item \textbf{Job Title:} The title of the job position.
+	
+\end{itemize}
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=\linewidth]{images/ProcessFlow.png}
+	\caption{Process Flowchart of the RAG System}
+	\label{fig:process_flowchart}
+\end{figure*}
+
+\FloatBarrier
+
+\begin{itemize}
 	\item \textbf{Company Name:} The name of the company offering the job.
 	\item \textbf{Publication Date:} The date when the job listing was published.
 	\item \textbf{Job Location:} The location where the job is based.
@@ -221,607 +236,182 @@ The entire methodology of the project can be broadly categorized into 5 main pha
 	\item \textbf{Output and Evaluation:} Evaluating the performance of the retrieval and generation components using appropriate metrics and documenting the results.
 \end{enumerate}
 
-The above methodology is depicted in the process flowchart below:
+The above methodology is depicted in the process flowchart in Figure \ref{fig:process_flowchart}.
 
 \subsection{EDA and Data Ingestion Phase}
-\subsubsection*{Exploratory Data Analysis:}
+
+Data ingestion refers to the entire process of taking raw data from the source (in this case, the LFJobs.csv file), 
+processing it to make it suitable for retrieval and generation, and storing it in a format that can be efficiently accessed by the RAG system.
+This ingestion pipeline was first trialed and tested through a Jupyter notebook, and then implemented in a Python script for the final system.
+
+\subsubsection*{Exploratory Data Analysis and Data Preprocessing}
+
+\subsubsection*{Exploratory Data Analysis (EDA)}
 
 EDA (Exploratory Data Analysis) refers to the initial phase of data analysis where we explore the dataset to understand its structure, identify patterns, and detect anomalies.
 
-In the context of this project, EDA of the provided dataset involved examining the distribution of features, checking for missing values, and visualizing relationships between features and the target variable (CLASS).
+For this assignment, I performed EDA on the LFJobs.csv dataset to gain insights into the data and inform the subsequent steps of the RAG pipeline.
 
-From the preliminary analysis, it was observed that the dataset had a significant class imbalance, with a higher proportion of diabetic patients compared to non-diabetic and pre-diabetic patients.
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/class_distribution.png}
-	\caption{Class Distribution in the Dataset}
-	\label{fig:class_distribution}
-\end{figure}
-
-Also looking at the entire data profile report obtained from Sweetviz, I found that 2 columns (Gender and CLASS) had dirty entries (non-standard entries) and white spaces that needed to be cleaned up.
+First, I loaded the dataset and examined the distribution of the job categories and job levels. The distributions were as follows:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{images/gender.png}
-	\caption{Dirty Entries in Gender Column}
-	\label{fig:gender_dirty}
+	\includegraphics[width=\linewidth]{images/dataset_dist.png}
+	\caption{Distribution of Job Categories and Job Levels in the LFJobs Dataset}
+	\label{fig:job_category_distribution}
 \end{figure}
+
+As seen in this above chart, the distributions of job categories are relatively balanced across the various categories.
+With similar counts (160 - 170) for all the categories except the "General" category.
+
+The general category has significantly lower count (below 20) which suggests weaker semantic representation of general jobs.
+
+The distribution of job levels is heavily skewed towards the senior level positions, with over 600 listings for it.
+
+Followed by mid-level positions with around 300 listings, and entry-level and internship positions with less than 50 listings.
+This suggests that this dataset could pose a retrieval bias towards the senior position over the other levels.
+
+I also performed text analysis on the job descriptions to understand the average length of the descriptions and the presence of HTML tags.
+
+As shown in Figure \ref{fig:job_description_length}, most HTML descriptions range from 3,500–8,000 chars, some exceed 15,000 chars, and the average length is around 6,000 chars.
+Raw HTML is too noisy and too large for direct embedding, so cleaning and chunking are necessary steps.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{images/class.png}
-	\caption{Dirty Entries in CLASS Column}
-	\label{fig:class_dirty}
+	\includegraphics[width=\linewidth]{images/raw_description.png}
+	\caption{Length of the Raw Job Descriptions in LFJobs Dataset}
+	\label{fig:job_description_length}
 \end{figure}
 
-I also computed the correlation matrix of the features to understand how they relate to each other and to the target variable. 
-The corelation matrix revealed that Urea and Cr had a strong positive correlation, which could be useful for feature selection and model training.
-
-Other moderately correlated features included BMI and Age, which are known risk factors for diabetes. After identifying these relationships,
-I proceeded to pairplot and scatter plot them to futher investigate the nature of their relationships.
+So, as a data prep step, I cleaned the HTML tags and normalized the text in the job descriptions to make them more suitable for embedding and retrieval.
+After cleaning, the average length of the job descriptions reduced to around 2,500 to 8,000 chars, with most descriptions falling between 2,000–6,000 chars as shown in Figure \ref{fig:cleaned_description_length}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{images/correlation_heatmap.png}
-	\caption{Correlation Matrix of the Features}
-	\label{fig:correlation_matrix}
+	\includegraphics[width=\linewidth]{images/description_lenth.png}
+	\caption{Length of the Cleaned Job Descriptions in LFJobs Dataset}
+	\label{fig:cleaned_description_length}
 \end{figure}
 
-Scatter plotting the strongly correlated features i.e. Urea and Cr with a regression line revealed a clear positive linear reltionship between them.
-This suggests that they may be capturing similar information about the patients' kidney function, which is relevant for diabetes prediction.
+The above figures shows a clean text length sample (200) distribution. We can see that the cleaned descriptions
+are still quite long, which reinforces the need for chunking to fit within the context window of the language model.
+
+After cleaning and normalizing the job descriptions, I proceeded to build documents for each job listing, which consist of the cleaned description along with relevant metadata such as job title, company name, and job category.
+This metadata can be useful for retrieval and generation, as it provides additional context about the job listings and can help the retriever find more relevant chunks based on user queries that may reference specific job titles
+
+\subsubsection*{Data Chunking and Embedding}
+Given the length of the cleaned job descriptions, I implemented a chunking strategy to split each description into smaller, overlapping chunks.
+Entire document chunking would dilute the semantic relevance of the retrieved context, while chunks too small would not solve the issue of large descriptions. 
+
+Hence, a recursive chunking strategy would be ideal as it would create chunks of varying sizes, ensuring each description is represented by multiple chunks that capture different levels of granularity.
+Figure \ref{fig:chunking_stats} illustrates the state of the chunks after the chunking process.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{images/regplot_cr_urea.png}
-	\caption{Scatter Plot of Urea vs Cr with Regression Line}
-	\label{fig:urea_cr_scatter}
+	\includegraphics[width=\linewidth]{images/chunking_stats.png}
+	\caption{Statistics of the Job Description Chunks after Chunking Process}
+	\label{fig:chunking_stats}
 \end{figure}
 
-Moving on to the moderately correlated features, I plotted a pairplot of all the features with CLASS as the hue to visualize how they relate to the target variable.
+Since, information spans across chunk boundaries, an overlap of 64 characters was implemented to preserve 
+semantic continuity between adjacent chunks. This allows the retriever to capture relevant information that may be split across chunks.
 
-The pairplot revealed that BMI and HbA1c had some separation between the classes, while other features showed more overlap.
+As seen in the Figure \ref{fig:chunking_stats}, most jobs generated about 15-25 chunks.
+Some even exceed 40, which indicates that large jobs may dominate the retrieval results if not properly managed.
 
-This tells us that BMI and HbA1c could be important features for classification, while the others may require more complex modeling to capture their relationships with the target variable.
+The chunk length distribution shows that most chunks are close to the 512 characters limit, which indicates that
+the chunking strategy is effective and efficient. This limit was obtained after much hit and trial.
+The length needed to be long enough to capture semantic meaning, but short enough to fit within the context window of the language model when combined with other chunks.s
 
-\begin{figure*}[t]
+Finally, visualizing and analyzing the number of companies with listings in the dataset.
+It was observed that that most of the listings where dominated by a few companies, with the top 20 companies accounting for over 60\% of the listings as shown in Figure \ref{fig:company_distribution}.
+As shown in figure \ref{fig:company_distribution}, this suggests that the dataset is biased towards these companies.
+
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\textwidth]{images/pairplot_cr_urea.png}
-	\caption{Pairplot of Features with CLASS as Hue}
-	\label{fig:pairplot}
-\end{figure*}
+	\includegraphics[width=\linewidth]{images/top_companies.png}
+	\caption{Distribution of Job Listings by Company in LFJobs Dataset}
+	\label{fig:company_distribution}
+\end{figure}
 
-After the end of EDA the information on the dataset which I managed to obtain can be summarized as follows:
-
-\subsubsection*{Data Characteristics:}
-		\begin{itemize}
-			\item The dataset contains 1000 records with 13 features and a target variable (CLASS) that has three classes: N, P, and Y.
-			\item Heavily imbalanced dataset with more diabetic patients (Y) than non-diabetic (N) and pre-diabetic (P) patients.
-			\item Non-linear patterns and very frequent overlap between classes in the feature space, suggesting that simple linear models may not perform well.
-			\item Numerous outliers present throughout the features.
-			\item Non-consolidated and dirty entries in the AGE and Gender columns.
-			\item ID and Patient\_ID columns are irrelevant to the analysis and contain noise.
-		\end{itemize}
-
-\subsubsection*{Feature Relationships:}
-		\begin{itemize}
-			\item HbA1c appeared to be the most separating feature between the classes, followed by BMI.
-			\item Gathered meaningful relationships between features with most with moderately positive correlation, and a few with strong positive correlation (Urea and Cr).
-		\end{itemize}
-
-From the above information, insights I could gather from the EDA phase which are necessary for the next steps are as follows:
-\subsubsection*{Insights:}
-		\begin{itemize}
-			\item \textbf{Class Imbalance}: Entails the need for weighted evaluation and stratified splitting.
-			\item \textbf{Non-linear Relationships}: Suggests the need for non-linear models and robust preprocessing (binning).
-			\item \textbf{Outliers}: Necessitates the use of robust imputation and scaling techniques.
-			\item \textbf{Dirty Entries}: Requires data cleaning and standardization.
-			\item \textbf{Irrelevant Features}: Calls for feature selection and removal of ID columns.
-		\end{itemize}
-
-\subsubsection*{Data Preprocessing:}
-
-After the EDA phase, I proceeded to preprocess the data based on the insights obtained.
-The preprocessing steps I applied to the dataset are as follows:
+After the EDA and data prep stage, the following insights were concluded:
 \begin{itemize}
-	\item \textbf{Data Cleaning}: Cleaned and consolidated the entries in the CLASS and Gender.
-	\item \textbf{Feature Selection}: Removed the ID and Patient\_ID columns as they were irrelevant to the analysis and introduced noise.
-	\item \textbf{Binning}: Binned the AGE and BMI features into groups to capture non-linear relationships and reduce the impact of outliers.
-	\item \textbf{Imputation and Scaling}: Applied median imputation and standardization to numeric features.
-	\item \textbf{Encoding}: One-hot encoded the categorical features for a consistent representation.
+	\item The dataset is relatively balanced across job categories but heavily skewed towards senior-level positions
+	\item Job descriptions are long and contain HTML, necessitating cleaning and chunking for effective retrieval
+	\item A recursive chunking strategy with overlap is effective in preserving semantic continuity while fitting within
+	\item The dataset is dominated by a few companies, which may introduce bias in retrieval results
 \end{itemize}
 
-After preprocessing, the dataset was ready for model training and evaluation. 
-The cleaned and processed data was then split into training and testing sets using stratified sampling to maintain the class distribution.
+These biases in dataset requires careful consideration as the retrieved results may be skewed towards certain categories, levels, or companies, which could affect the relevance and diversity of the generated responses.
 
-\subsection{Model Development Process}
-The preprocessed data was split into 3 sets, the training set, the validation set, and the test set.
-The training set was used to train the models, the validation set was used for model validation, and the test set was used for final evaluation.
-The splits were in the ratio of 7:1:2 for training, validation, and testing respectively.
+Hence, implementing a hybrid retriever that combines dense and sparse retrieval methods, along with a reranker, can help mitigate these biases and improve the overall performance of the RAG system.
 
-\subsection*{Model Building Phase:}
-For the scope of this project, I implemented a classification and clustering pipeline as I was instructed.
+Also metadata filtering and diversification strategies can be implemented in the future to further address these biases.
 
-Classification models are a type of supervised learning algorithm that are used to predict the class labels of new instances based on the patterns learned from the training data.
-Clustering models are a type of unsupervised learning algorithm that are used to group similar instances together based on their features without using class labels.
+\subsubsection*{Embedding the Chunks}
 
-\subsubsection*{Supervised Models:}
-The supervised models I implemented for classification are:
-\begin{enumerate}
-	\item Random Forest Classifier
-	\item XGBoost Classifier
-	\item Support Vector Machine (SVM) Classifier
-\end{enumerate}
+Embedding refers the process of converting text into dense vector representations that capture the semantic meaning of the text on a continuous vector space.
+This multidimensional representation allows for more effective similarity comparisons between text chunks and user queries, which is essential for retrieval in a RAG system.
 
-The supervised models needed to be trained on splits of the data so as to prevent data leakage and allow for proper evaluation.
-The training characteristic curves of the models are as follows:
+For this project, I used the BAAI/bge-small-en-v1.5 sentence transformer model to embed the job description chunks.
+This model is designed for generating high-quality sentence embeddings that capture semantic meaning effectively, making it suitable for our retrieval task.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/rf_training_curve.png}
-	\caption{Training Curve of the Random Forest Classifier}
-	\label{fig:rf_training_curve}
-\end{figure}
+The BAAI/bge-small-en-v1.5 model is a bidirectional, hugging face transformer model optmized for generting sentence embeddings.
+It is a small light weight and efficient model with about 33.4 million parameters. This model was chosen for its balance
+between perfomance and computational efficiency, which is important for this locally served RAG system.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/xgb_accuracy_curve.png}
-	\caption{Training Curve of the XGBoost Classifier}
-	\label{fig:xgb_accuracy_curve}
-\end{figure}
+The context window of this model is also algns with our chunk limit of 512 characters, ensuring that each chunk can be fully embedded without truncation.
+The embedded vectors space can be visualzied with a 3 dimensional PCA plot as shown in Figure \ref{fig:embedding_space}.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/svm_learning_curve.png}
-	\caption{Training Curve of the SVM Classifier}
-	\label{fig:svm_training_curve}
-\end{figure}
+PCA (Principal Component Analysis) is a dimensionality reduction technique that transforms high-dimensional data into a lower-dimensional space while preserving as much variance as possible.
+By applying PCA to the embedded vectors, we can visualize the semantic relationships between the job description chunks
+in a 3D space. Clusters of points in this space may indicate semantically similar chunks, while the distance between points can reflect their semantic dissimilarity.
 
-From the above training curves, we can see that all three models are learning and improving their performance on the training data over time.
-The validation curve is also catching up with the training curve, which suggests that the models are not overfitting and are generalizing well to unseen data.
+\subsubsection*{Vector Store}
 
-After training the models, their weights were saved to disk for a reproducible evaluation without the need to re-run training. This also allows for easy comparison of the models' performance on the test set.
+The generated embeddings were stored in a local ChromaDB vector database, 
+which provides efficient storage and retrieval of high-dimensional vectors.
 
-Feature importance plots were also generated for the Random Forest and XGBoost models to understand which features were most influential in the classification process.
-The feature importance plots are as follows:
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/rf_feature_importance.png}
-	\caption{Feature Importance of the Random Forest Classifier}
-	\label{fig:rf_feature_importance}
-\end{figure}
+ChromaDB is an open-source vector database that supports fast similarity search and is optimized for use cases like RAG systems.
+
+It allows for efficient indexing and retrieval of the embedded job description chunks based on their semantic similarity to user queries.
+The vector store was configured to use cosine similarity as the distance metric for retrieval, which is commonly used for measuring the similarity between dense vector representations in NLP tasks.
+
+The architecture of ChromaDB consists of these main components as shown in Figure \ref{fig:chromadb_architecture}:
+
+\begin{description}
+	\item[Vector Store:] Responsible for storing the embedded vectors and their associated metadata, allowing for efficient retrieval based on similarity.
+	\item[Core Chroma Engine:] Handles the core functionalities of the database, including vector indexing, search algorithms, and data management.
+	\item[Query Processor:] Optimizing and executing search queries against the vector store, utilizing the core engine to retrieve relevant results based on cosine similarity.
+	\item[API Layer:] Provides an interface for interacting with the database, allowing for operations such as inserting new vectors, querying for similar vectors, and managing the stored data.
+\end{description}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{images/xgb_feature_importance.png}
-	\caption{Feature Importance of the XGBoost Classifier}
-	\label{fig:xgb_feature_importance}
+	\includegraphics[width=\linewidth]{images/chromadb.jpg}
+	\caption{Architecture of ChromaDB Vector Database \\ \textbf{Source: https://purelogics.com/what-are-vector-databases/}}
+	\label{fig:chromadb_architecture}
 \end{figure}
 
-As we predicted in the EDA phase, HbA1c and BMI are among the most important features for both models, which aligns with our understanding of diabetes risk factors.
+Cosine Similarity measures the cosine of the angle between two vectors in a multi-dimensional space, providing a value between -1 and 1 that indicates how similar the two vectors are in terms of their direction.
 
-AGE binning also helped to capture the non-linear relationship between age and diabetes risk, as the binned AGE feature also appears in the top important features for both models.
+A value of 1 indicates that the vectors are identical in direction, while a value of 0 indicates that they are orthogonal (i.e., have no similarity), and a value of
+-1 indicates that they are diametrically opposed.
 
-SVM does not provide feature importance in the same way as tree-based models as it is a linear model.
-
-\subsubsection*{Unsupervised Models:}
-The unsupervised models I implemented for clustering are:
-\begin{enumerate}
-	\item K-Means Clustering
-	\item Agglomerative Clustering
-	\item Gaussian Mixture Model (GMM)
-\end{enumerate}
-
-The unsupervised models were trained on the full dataset rather than the held-out test split since they do not use class labels and are meant to discover hidden structures in the data.
-PCA was applied to reduce the dimensionality of the data to two dimensions for scatter plot visualization, making it possible to see how well the unsupervised structure maps onto the actual class boundaries.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/pca.png}
-	\caption{PCA Visualization of Clusters}
-	\label{fig:pca_visualization}
-\end{figure}
-
-From the PCA visualization, we can see that there is some separation between the classes, but there is also a lot of overlap, which suggests that the clusters may not perfectly align with the true class labels.
-
-For the K-Means model, I also plotted an elbow curve to select the optimal number of clusters (k) based on the within-cluster sum of squares (WCSS).
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/kmeans_elbow_curve.png}
-	\caption{Elbow Curve for K-Means Clustering}
-	\label{fig:elbow_curve}
-\end{figure}
-
-But as we can see from the elbow curve, there is no clear elbow point, which suggests that there may not be a well-defined number of clusters in the data.
-Hence, I used K-value of 3 for K-Means clustering to match the number of classes in the target variable.
-
-For the Agglomerative Clustering and GMM, I also set the number of clusters to 3 for consistency and comparison with K-Means.
-
-The clusters produced by each model are as follows:
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/kmeans_clusters.png}
-	\caption{Clusters produced by K-Means Clustering}
-	\label{fig:kmeans_clusters}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/hierarchical_clusters.png}
-	\caption{Clusters produced by Agglomerative Clustering}
-	\label{fig:agglomerative_clusters}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/gmm_clusters.png}
-	\caption{Clusters produced by Gaussian Mixture Model}
-	\label{fig:gmm_clusters}
-\end{figure}
-
-Each of the clustering models produce a similar clustering structure, with some overlap between the clusters, which is consistent with the PCA visualization and the nature of the data.
-
-We can also see an oblong shape along the first principal component, which suggests that there may be some underlying structure in the data that is not captured by the original features.
-
-There also seems to be some outliers in the data which do not clearly belong to any of the clusters.
-This is a limitation of the clustering models, as they may struggle to assign these outliers to a cluster, which can affect the overall performance and interpretation of the clusters.
-
-Each of the clustering models were also saved to disk for reproducibility and further analysis without the need to re-run training.
-
-\subsection{Model Evaluation Process}
-After traning the supervised and unsupervised models, I proceeded to evaluate their performance using standard metrics.
-There are various different metrics for evaluating classification and clustering models, and I used a combination of them to get a comprehensive understanding of the models' performance.
-
-\subsubsection*{Evaluation of Supervised Models:}
-The supervised models were evaluated using the following metrics:
-
-\textit{\textbf{1. Accuracy:}}
-
-The proportion of correct predictions out of the total preditctions made. Mathematically, 
-\begin{equation} 
-	\mathit{Accuracy} = \frac{\mathit{TP} + \mathit{TN}}{\mathit{TP} + \mathit{TN} + \mathit{FP} + \mathit{FN}} 
-\end{equation}
-
-\textit{\textbf{2. Precision:}}
-
-The proportion of true positive predictions out of all positive predictions made. Mathematically,
+Mathematically, cosine similarity between two vectors A and B can be calculated as follows:
 \begin{equation}
-	\mathit{Precision} = \frac{\mathit{TP}}{\mathit{TP} + \mathit{FP}}
+\text{Cosine Similarity} = \frac{A \cdot B}{\|A\| \|B\|}
 \end{equation}
 
-\textit{\textbf{3. Recall:}}
-
-The proportion of true positive predictions out of all actual positive instances. Mathematically,
-\begin{equation}
-	\mathit{Recall} = \frac{\mathit{TP}}{\mathit{TP} + \mathit{FN}}
-\end{equation}
-
-\textit{\textbf{4. F1 Score:}}
-
-The harmonic mean of precision and recall, providing a balance between the two. Mathematically,
-\begin{equation}
-	\mathit{F1} = 2 \times \frac{\mathit{Precision} \times \mathit{Recall}}{\mathit{Precision} + \mathit{Recall}}
-\end{equation}
-
-\textit{\textbf{5. ROC-AUC:}}
-
-The area under the receiver operating characteristic curve, which plots the true positive rate against the false positive rate at various threshold settings. A higher AUC indicates better model performance.
-\begin{equation}
-	\mathit{AUC} = \int_{0}^{1} \mathit{TPR}(FPR) \, dFPR
-\end{equation}
-
-\textit{Where, \newline
-	$TP$ denotes true positives.
-	$TN$ denotes true negatives.
-	$FP$ denotes false positives.
-	$FN$ denotes false negatives.
-	}
-
-All of which were obtained from the confusion matrix of the models' predictions on the test set, and were calculated for each class as well as in a weighted and macro-averaged manner to account for class imbalance.
-The confusion matrix for each model are as follows:
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\linewidth]{images/confusion_matrices_labeled.png}
-	\caption{Confusion Matrices of the Supervised Models}
-	\label{fig:confusion_matrices}
-\end{figure}
-
-The evaluation results of the supervised models are tabulated below:
-
-\begin{table}[H]
-\centering
-\scriptsize
-\caption{Per-class precision, recall, and F1-score.}
-\label{tab:classification_report}
-\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}Xccc}
-\toprule
-Class & Precision & Recall & F1-score \\
-\midrule
-\multicolumn{4}{l}{\textbf{Random Forest}} \\
-N & 1.00 & 1.00 & 1.00 \\
-P & 1.00 & 0.90 & 0.95 \\
-Y & 0.99 & 1.00 & 1.00 \\
-\addlinespace
-\multicolumn{4}{l}{\textbf{XGBoost}} \\
-N & 1.00 & 0.90 & 0.95 \\
-P & 1.00 & 0.90 & 0.95 \\
-Y & 0.98 & 1.00 & 0.99 \\
-\addlinespace
-\multicolumn{4}{l}{\textbf{SVM}} \\
-N & 0.79 & 0.90 & 0.84 \\
-P & 0.58 & 0.70 & 0.64 \\
-Y & 0.99 & 0.96 & 0.97 \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-
-As predicted during the EDA phase, the Random Forest and XGBoost models performed very well with high precision, recall, and F1-scores across all classes, while the SVM model struggled with the pre-diabetic class (P) due to the non-linear relationships and class imbalance in the data.
-
-Linear models like SVM may not capture the complex patterns in the data as effectively as tree-based models, which can handle non-linear relationships and interactions between features.
-So this is consistent with our understanding of the data and the nature of the models.
-
-The ROC-AUC (Micro-Average) scores for each class and model are as follows:
-
-\begin{table}[H]
-\centering
-\scriptsize
-\caption{Micro-average ROC-AUC for each supervised model.}
-\label{tab:auc_micro}
-\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}Xc}
-\toprule
-Model & Micro-average AUC \\
-\midrule
-Random Forest & 0.999 \\
-XGBoost & 0.999 \\
-SVM & 0.995 \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\begin{figure*}[t]
-	\centering
-	\includegraphics[width=\textwidth]{images/model_comparison.png}
-	\caption{Bar Charts Comparing the Evaluation Metrics of the Supervised Models}
-	\label{fig:model_comparison}
-\end{figure*}
-
-Figure \ref{fig:model_comparison} shows a bar chart comparing the evaluation metrics of the three supervised models, 
-which clearly illustrates the superior performance of the Random Forest and XGBoost models compared to SVM, especially in terms of precision, recall, 
-and F1-score. 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{images/roc_auc_curve_comparison.png}
-	\caption{ROC Curves for the Supervised Models}
-	\label{fig:roc_curves}
-\end{figure}
-
-All 3 models achieved very high ROC-AUC scores, i.e. close to 1, which indicates that they are performing well in distinguishing between the classes.
-Values closer to 0.5 would indicate that the model is performing no better than random guessing.
-
-\subsubsection{Evaluation of Unsupervised Models:}
-
-Evaluation of unsupervised models is more different than supervised models since we do not have true class labels to compare against.
-There is no dedicated metric to evaluate the accuracy of clustering models, but we can usea combination of internal and external metrics to assess the quality of the clusters.
-The unsupervised models were evaluated using the following metrics:
-
-\textit{\textbf{1. Silhouette Score:}}
-
-Measures how similar an instance is to its own cluster compared to other clusters. A higher silhouette score indicates better-defined clusters. Mathematically,
-\begin{equation}
-	\mathit{Silhouette} = \frac{b - a}{\max(a, b)}
-\end{equation}
-
-\textit{Where:\\
-	$a$ : the average distance between an instance and all other instances in the same cluster (intra-cluster distance).\\
-	$b$ : the average distance between an instance and all other instances in the nearest cluster (inter-cluster distance).
-}
-
-\textit{\textbf{2. Davies-Bouldin Index:}}
-
-Measures the average similarity between clusters. A lower Davies-Bouldin index indicates better clustering. Mathematically,
-\begin{equation}
-	\mathit{DB} = \frac{1}{k} \sum_{i=1}^{k} \max_{j \neq i} \left( \frac{\sigma_i + \sigma_j}{d(c_i, c_j)} \right)
-\end{equation}
-
-\textit{Where:\\
-	$k$ : the number of clusters.\\
-	$\sigma_i$ : the average distance between instances in cluster $i$ and the centroid of cluster $i$.\\
-	$d(c_i, c_j)$: the distance between the centroids of clusters $i$ and $j$.
-}
-
-\begin{figure*}[!t]
-	\centering
-	\includegraphics[width=\textwidth]{images/clustering_model_comparison.png}
-	\caption{Bar Charts Comparing the Evaluation Metrics of the Unsupervised Models}
-	\label{fig:unsupervised_comparison}
-\end{figure*}
-
-\begin{figure*}[!t]
-	\centering
-	\includegraphics[width=\textwidth]{images/actual_vs_cluster_comparison.png}
-	\caption{PCA Visualization of Clusters for Each Unsupervised Model with Actual Class Labels as Hue}
-	\label{fig:unsupervised_pca_comparison}
-\end{figure*}
-
-\textit{\textbf{3. Calinski-Harabasz Score:}}
-
-Measures the ratio of between-cluster variance to within-cluster variance. A higher Calinski-Harabasz score indicates better clustering. Mathematically,
-\begin{equation}
-	\mathit{CH} = \frac{\text{Tr}(B_k)}{\text{Tr}(W_k)} \times \frac{n - k}{k - 1}
-\end{equation}
-
-\textit{Where:\\
-	$B_k$ : the between-cluster dispersion matrix.\\
-	$W_k$ : the within-cluster dispersion matrix.\\
-	$n$ : the total number of instances.\\
-	$k$ : the number of clusters.
-}
-
-\textit{\textbf{4. Adjusted Rand Index (ARI):}}
-
-Measures the similarity between the true class labels and the cluster assignments, adjusted for chance. A higher ARI indicates better clustering. Mathematically,
-\begin{equation}
-	\mathit{ARI} = \frac{\text{RI} - \text{Expected RI}}{\max(\text{RI}) - \text{Expected RI}}
-\end{equation}
-
-\textit{Where:\\
-	$\text{RI}$ : the Rand Index, which measures the agreement between two clusterings.\\
-	$\text{Expected RI}$ : the expected value of the Rand Index under random labeling.
-}
-
-\textit{\textbf{5. Normalized Mutual Information (NMI):}}
-
-Measures the mutual information between the true class labels and the cluster assignments, normalized to account for chance
-and the number of clusters. A higher NMI indicates better clustering. Mathematically,
-\begin{equation}
-	\mathit{NMI} = \frac{I(X; Y)}{\sqrt{H(X) H(Y)}}
-\end{equation}
-
-\textit{Where:\\
-	$I(X; Y)$ : the mutual information between the true labels $X$ and the cluster assignments $Y$.\\
-	$H(X)$ : the entropy of the true labels.\\
-	$H(Y)$ : the entropy of the cluster assignments.
-}
-
-The evaluation results of the unsupervised models are tabulated below:
-
-\begin{table}[H]
-\centering
-\scriptsize
-\caption{Clustering evaluation metrics for the unsupervised models.}
-\label{tab:unsupervised_metrics}
-\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}Xccc}
-\toprule
-Metric & K-Means & Hierarchical & Gaussian Mixture \\
-\midrule
-Silhouette Score & 0.221910 & 0.222706 & 0.216481 \\
-Davies-Bouldin Score & 1.378506 & 1.515881 & 2.598974 \\
-Calinski-Harabasz Score & 157.718387 & 144.809497 & 122.731468 \\
-Adjusted Rand Index & 0.587506 & 0.512008 & 0.417449 \\
-Normalized Mutual Information & 0.447570 & 0.412447 & 0.370465 \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-We can see from the evaluation metrics tabulated in Table \ref{tab:unsupervised_metrics} that the K-Means model performed the best among the three unsupervised models, with the highest silhouette score, lowest Davies-Bouldin score, highest Calinski-Harabasz score, and highest ARI and NMI scores.
-
-The Agglomerative Clustering model performed slightly worse than K-Means, while the Gaussian Mixture Model performed the worst among the three, which is consistent with the PCA visualization and the nature of the data.
-
-As Gaussian Mixture Models assume that the data is generated from a mixture of Gaussian distributions, which may not be the case for this dataset, leading to poorer performance compared to K-Means and Agglomerative Clustering.
-K-means performed best because it is a simple and effective clustering algorithm that works well in general clustering scenarios.
-
-\section{Result Analysis and Conclusion}
-
-\subsection{Result Analysis}
-
-The results of the supervised models indicate that the Random Forest and XGBoost classifiers performed exceptionally well in predicting diabetes classes, with high precision, recall, and F1-scores across all classes.
-
-The SVM classifier, on the other hand, struggled with the pre-diabetic class (P) due to the non-linear relationships and class imbalance in the data, which is consistent with our understanding
-of the data and the nature of the models. 
-
-The ROC-AUC scores for all three models were very high, indicating that they are performing well in distinguishing between the classes.
-
-The results of the unsupervised models indicate that the K-Means clustering algorithm performed the best among the three unsupervised models, with the highest silhouette score, lowest Davies-Bouldin score, highest Calinski-Harabasz score, and highest ARI and NMI scores.
-
-The Agglomerative Clustering model performed slightly worse than K-Means, while the Gaussian Mixture Model performed the worst among the three, which is consistent with the PCA visualization and the nature of
-the data. 
-The Gaussian Mixture Model's assumption of data being generated from a mixture of Gaussian distributions may not hold for this dataset, leading to poorer performance compared to K-Means and Agglomerative Clustering.
-
-Overall, the results of this project demonstrate the importance of choosing appropriate models and evaluation metrics based on the characteristics of the data and the problem at hand.
-
-\subsection{Conclusion}
-In conclusion, this project provided a comprehensive analysis of the diabetes dataset using both supervised and unsupervised machine learning techniques.
-The supervised models, particularly Random Forest and XGBoost, performed exceptionally well in predicting diabetes classes, while the SVM model struggled with the pre-diabetic class due to the non-linear relationships and
-class imbalance in the data. The unsupervised models revealed some underlying structure in the data, with K-Means performing the best among the three clustering algorithms.
-The project also highlighted the importance of thorough exploratory data analysis, proper data preprocessing, and careful model selection and evaluation to achieve good performance and meaningful insights from the data.
-Hence, the objectives of the project were successfully achieved, and the results provide valuable insights into the diabetes dataset and the effectiveness of different machine learning techniques for classification and clustering tasks.
-
-\section{Limitations and Future Enhancements}
-
-\subsection{Limitations}
+\textit{Where: \\}
 \begin{itemize}
-	\item The dataset used in this project is relatively small, which may limit the generalizability of the results and the performance of the models.
-	\item The class imbalance in the dataset may have affected the performance of the models, particularly the SVM classifier, which struggled with the pre-diabetic class.
-	\item The unsupervised models may not have captured the true underlying structure
-	\item Clustering is inherently subjective and may not perfectly align with the true class labels, which can affect the interpretation of the clusters.
-	\item Selecting optimal cluster parameters (e.g., number of clusters) can be challenging and may require more sophisticated techniques than the elbow method.
-	\item Comparing the performance of supervised and unsupervised models can be difficult since they are designed for different tasks and may not be directly comparable.
+	\item $A \cdot B$ is the dot product of vectors A and B
+	\item $\|A\|$ and $\|B\|$ are the magnitudes (norms) of vectors A and B, respectively
 \end{itemize}
 
-\subsection{Future Enhancements}
-\begin{itemize}
-	\item Hyperparameter tuning and optimization for the supervised models to further improve their performance.
-	\item Exploring additional supervised models such as neural networks or ensemble methods to see if they can capture the complex relationships in the data better than the current models.
-	\item Handling class imbalance using techniques such as SMOTE (Synthetic Minority Over-sampling Technique) or class weighting to improve the performance of models on the minority classes.
-	\item Additional feature engineering and selection techniques to identify the most relevant features for classification and clustering.
-	\item Lipid profile ratios with the help of an expert could be engineered as additional features to capture more complex relationships in the data.
-\end{itemize}
+ChromaDB was picked over other vector databases like FAISS or other vector store libraries due to its ease of use, efficient indexing and retrieval capabilities.
 
-\newpage
+It is simple to setup and run locally, persistant without external dependencies, python native and sutiable for both notebook and script usages.
 
-\section{Appendix}
-
-\subsection{Project Directory Structure}
-
-\begin{verbatim}
-project/
-|
-|-- classificationBook.ipynb
-|-- clusteringBook.ipynb
-|-- dataPrep.ipynb
-|-- edaBook.ipynb
-|-- evalClassModel.ipynb
-|-- evalClusteringModel.ipynb
-|
-|-- dataset/
-|-- images/
-|-- models/
-|-- processed_arrays/
-|
-`-- requirements.txt
-\end{verbatim}
-
-\subsection{Technologies Used}
-
-The following tools and libraries were used in this project:
-
-\textbf{Tools:}
-\begin{itemize}
-	\item Git (version control)
-	\item PyCharm (IDE)
-	\item Miniconda (environment and package management)
-\end{itemize}
-
-\textbf{Python Libraries:}
-\begin{itemize}
-	\item \texttt{pandas}
-	\item \texttt{numpy}
-	\item \texttt{matplotlib}
-	\item \texttt{seaborn}
-	\item \texttt{scikit-learn}
-	\item \texttt{xgboost}
-	\item \texttt{lightgbm}
-	\item \texttt{catboost}
-	\item \texttt{plotly}
-	\item \texttt{ipywidgets}
-	\item \texttt{sweetviz}
-	\item \texttt{notebook}
-	\item \texttt{jupyterlab}
-	\item \texttt{ipykernel}
-	\item \texttt{setuptools==68.2.2}
-	\item \texttt{torch}
-	\item \texttt{torchvision}
-	\item \texttt{torchaudio}
-	\item \texttt{cupy-cuda12x}
-	\item \texttt{joblib}
-\end{itemize}
-
-
-
-%%%%%%%%%%%%%%   Bibliography   %%%%%%%%%%%%%%
-
+It also provides a higher level document store abstraction with metadata support, which is useful for our use case.
 \end{document}
